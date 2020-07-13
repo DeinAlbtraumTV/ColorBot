@@ -18,7 +18,7 @@ import java.io.InputStreamReader;
 
 public class ColorBot {
 
-    public static String version = "0.7.00"; //0.7.01
+    public static String version = "0.7.03";
 
     public static Color orange = new Color(255, 127, 0);
 
