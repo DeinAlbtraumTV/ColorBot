@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Time;
+import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Objects;
@@ -167,7 +167,7 @@ public class OnReadyListener extends ListenerAdapter {
                 System.out.println("[ColorBot ColorBot-Thread] INFO - So many Servers: " + ColorBot.servers + " and so many Members: " + ColorBot.members + " after Shard: " + event.getJDA().getShardInfo().getShardId() + " loaded");
 
                 System.out.println("[ColorBot ColorBot-Thread] Info - Database Repair finished. Next one scheduled in 1h");
-                System.out.println("[ColorBot ColorBot-Thread] Info - Time when finished: " + System.currentTimeMillis());
+                System.out.println("[ColorBot ColorBot-Thread] Info - Time when finished: " + new Timestamp(System.currentTimeMillis()));
                 System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
 
                 Instant end = Instant.now();
