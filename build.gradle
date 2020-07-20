@@ -21,7 +21,7 @@ dependencies {
 }
 
 shadowJar {
-    archiveFileName = "ColorBot2.0.jar"
+    archiveName = "ColorBot2.0.jar"
 }
 
 compileJava.options.encoding = 'UTF-8'
