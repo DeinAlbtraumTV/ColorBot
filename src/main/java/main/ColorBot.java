@@ -18,10 +18,10 @@ import java.io.InputStreamReader;
 
 public class ColorBot {
 
-    public static String version = "0.7.03";
+    public static String version = "0.7.04";
     public static Color orange = new Color(255, 127, 0);
-    public static long servers = 0;
-    public static long members = 0;
+    public static long servers = 0L;
+    public static long members = 0L;
     public static boolean shutdown = false;
 
     private static ShardManager ShardManager;

@@ -7,7 +7,7 @@ plugins {
 mainClassName = 'main.ColorBot'
 
 group 'ColorBot2.0'
-version '0.5.25'
+version '0.7.04'
 
 sourceCompatibility = 1.8
 
@@ -21,7 +21,7 @@ dependencies {
 }
 
 shadowJar {
-    archiveName = "ColorBot2.0.jar"
+    archiveFileName = "ColorBot2.0.jar"
 }
 
 compileJava.options.encoding = 'UTF-8'

@@ -30,62 +30,62 @@ public class CommandListener extends ListenerAdapter {
                     if (result != null && !result.isClosed()) {
                         String customPrefix = result.getString("prefix");
                         try {
-                                if (message.startsWith("!color ") || message.startsWith("!c ") || message.startsWith((customPrefix) + " ")) {
+                            if (message.startsWith("!color ") || message.startsWith("!c ") || message.startsWith((customPrefix) + " ")) {
 
-                                    if (message.startsWith("!color ")) {
-                                        message = message.substring(("!color ").length());
-                                    } else if (message.startsWith("!c ")) {
-                                        message = message.substring(("!c ").length());
-                                    } else if (message.startsWith(Objects.requireNonNull(SQLHandler.onQuery("SELECT prefix from customPrefix WHERE guildid=" + event.getGuild().getId())).getString("prefix"))) {
-                                        message = message.substring((Objects.requireNonNull(SQLHandler.onQuery("SELECT prefix from customPrefix WHERE guildid=" + event.getGuild().getId())).getString("prefix") + " ").length());
-                                    }
-
-                                    if (message.startsWith("whitelist ")) {
-                                        whitelistRole(event);
-                                    } else if (message.startsWith("set-prefix ")) {
-                                        setPrefix(event, message.substring(("set-prefix ").length()));
-                                    } else if (message.startsWith("blacklist ")) {
-                                        blacklistRole(event);
-                                    } else if (message.startsWith("assignable")) {
-                                        getAssignable(event);
-                                    } else if (message.startsWith("transparent-all")) {
-                                        transparentAll(event);
-                                    } else if (message.startsWith("remote-delete ")) {
-                                        remoteDelete(event);
-                                    } else if (message.startsWith("set-role-position ")) {
-                                        setRolePosition(event);
-                                    } else if (message.startsWith("auto-whitelist ")) {
-                                        autoWhitelist(event, message.substring(("auto-whitelist ").length()));
-                                    } else if (message.startsWith("assign ")) {
-                                        assign(event);
-                                    } else if (message.startsWith("remove ")) {
-                                        remove(event);
-                                    } else if (message.startsWith("create ")) {
-                                        create(event, message.substring(("create ").length()));
-                                    } else if (message.startsWith("help ")) {
-                                        help(event, message.substring(("help ").length()));
-                                    } else if (message.startsWith("help")) {
-                                        help(event, message.substring(("help").length()));
-                                    } else if (message.startsWith("whitelist-words ")) {
-                                        whitelistWord(event, message.substring(("whitelist-words ").length()));
-                                    } else if (message.startsWith("blacklist-words ")) {
-                                        blacklistWord(event, message.substring(("blacklist-words ").length()));
-                                    } else if (message.startsWith("words-blacklisted")) {
-                                        getBlacklistedWords(event);
-                                    } else if (message.startsWith("create-whitelist ")) {
-                                        whitelistRoleForCreate(event);
-                                    } else if (message.startsWith("create-blacklist ")) {
-                                        blacklistRoleForCreate(event);
-                                    } else if (message.startsWith("can-create")) {
-                                        getRolesAbleToCreate(event);
-                                    } else if (message.startsWith("role-amount ")) {
-                                        setMaxAssignAmount(event, message.substring(("role-amount ").length()));
-                                    } else if (message.startsWith("easter")) {
-                                        easter(event);
-                                    } else {
-                                        event.getChannel().sendMessage("Have you tried the help-command yet?").queue();
-                                    }
+                                if (message.startsWith("!color ")) {
+                                    message = message.substring(("!color ").length());
+                                } else if (message.startsWith("!c ")) {
+                                    message = message.substring(("!c ").length());
+                                } else if (message.startsWith(Objects.requireNonNull(SQLHandler.onQuery("SELECT prefix from customPrefix WHERE guildid=" + event.getGuild().getId())).getString("prefix"))) {
+                                    message = message.substring((Objects.requireNonNull(SQLHandler.onQuery("SELECT prefix from customPrefix WHERE guildid=" + event.getGuild().getId())).getString("prefix") + " ").length());
                                 }
+
+                                if (message.startsWith("whitelist ")) {
+                                    whitelistRole(event);
+                                } else if (message.startsWith("set-prefix ")) {
+                                    setPrefix(event, message.substring(("set-prefix ").length()));
+                                } else if (message.startsWith("blacklist ")) {
+                                    blacklistRole(event);
+                                } else if (message.startsWith("assignable")) {
+                                    getAssignable(event);
+                                } else if (message.startsWith("transparent-all")) {
+                                    transparentAll(event);
+                                } else if (message.startsWith("remote-delete ")) {
+                                    remoteDelete(event);
+                                } else if (message.startsWith("set-role-position ")) {
+                                    setRolePosition(event);
+                                } else if (message.startsWith("auto-whitelist ")) {
+                                    autoWhitelist(event, message.substring(("auto-whitelist ").length()));
+                                } else if (message.startsWith("assign ")) {
+                                    assign(event);
+                                } else if (message.startsWith("remove ")) {
+                                    remove(event);
+                                } else if (message.startsWith("create ")) {
+                                    create(event, message.substring(("create ").length()));
+                                } else if (message.startsWith("help ")) {
+                                    help(event, message.substring(("help ").length()));
+                                } else if (message.startsWith("help")) {
+                                    help(event, message.substring(("help").length()));
+                                } else if (message.startsWith("whitelist-words ")) {
+                                    whitelistWord(event, message.substring(("whitelist-words ").length()));
+                                } else if (message.startsWith("blacklist-words ")) {
+                                    blacklistWord(event, message.substring(("blacklist-words ").length()));
+                                } else if (message.startsWith("words-blacklisted")) {
+                                    getBlacklistedWords(event);
+                                } else if (message.startsWith("create-whitelist ")) {
+                                    whitelistRoleForCreate(event);
+                                } else if (message.startsWith("create-blacklist ")) {
+                                    blacklistRoleForCreate(event);
+                                } else if (message.startsWith("can-create")) {
+                                    getRolesAbleToCreate(event);
+                                } else if (message.startsWith("role-amount ")) {
+                                    setMaxAssignAmount(event, message.substring(("role-amount ").length()));
+                                } else if (message.startsWith("easter")) {
+                                    easter(event);
+                                } else {
+                                    event.getChannel().sendMessage("Have you tried the help-command yet?").queue();
+                                }
+                            }
                         } catch (SQLException e) {
                             System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
                             System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to retrieve custom prefix from database");
@@ -127,7 +127,7 @@ public class CommandListener extends ListenerAdapter {
     }
 
     private void whitelistRole(MessageReceivedEvent event) {
-        if(Objects.requireNonNull(event.getMessage().getMember()).hasPermission(Permission.MANAGE_ROLES)) {
+        if (Objects.requireNonNull(event.getMessage().getMember()).hasPermission(Permission.MANAGE_ROLES)) {
             StringBuilder builder = new StringBuilder();
             if (!event.getMessage().getMentionedRoles().isEmpty()) {
                 SQLHandler.onUpdate("INSERT OR IGNORE INTO  _" + event.getGuild().getId() + "(roleid) VALUES(" + event.getMessage().getMentionedRoles().get(0).getIdLong() + ")");
@@ -166,7 +166,7 @@ public class CommandListener extends ListenerAdapter {
     }
 
     private void setPrefix(MessageReceivedEvent event, String message) {
-        if(Objects.requireNonNull(event.getMessage().getMember()).hasPermission(Permission.MANAGE_SERVER)) {
+        if (Objects.requireNonNull(event.getMessage().getMember()).hasPermission(Permission.MANAGE_SERVER)) {
             SQLHandler.onUpdate("UPDATE customPrefix SET prefix=\"" + message + "\" WHERE guildid=" + event.getGuild().getIdLong());
             event.getChannel().sendMessage(new EmbedBuilder()
                     .setTitle("Success")
@@ -187,14 +187,14 @@ public class CommandListener extends ListenerAdapter {
     }
 
     private void blacklistRole(MessageReceivedEvent event) {
-        if(Objects.requireNonNull(event.getMessage().getMember()).hasPermission(Permission.MANAGE_ROLES)) {
+        if (Objects.requireNonNull(event.getMessage().getMember()).hasPermission(Permission.MANAGE_ROLES)) {
             StringBuilder builder = new StringBuilder();
 
             SQLHandler.onUpdate("DELETE FROM _" + event.getGuild().getId() + " WHERE roleid=" + event.getMessage().getMentionedRoles().get(0).getIdLong());
             builder.append(event.getMessage().getMentionedRoles().get(0).getName());
 
             if (event.getMessage().getMentionedRoles().size() > 1) {
-                for (int x = 1; x < event.getMessage().getMentionedRoles().size(); x++ ) {
+                for (int x = 1; x < event.getMessage().getMentionedRoles().size(); x++) {
                     SQLHandler.onUpdate("DELETE FROM _" + event.getGuild().getId() + " WHERE roleid=" + event.getMessage().getMentionedRoles().get(x).getIdLong());
                     builder.append("\n ").append(event.getMessage().getMentionedRoles().get(x).getName());
                 }
@@ -239,7 +239,7 @@ public class CommandListener extends ListenerAdapter {
                         System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
                     }
                 }
-                
+
                 return;
             } else {
                 do {
@@ -278,8 +278,8 @@ public class CommandListener extends ListenerAdapter {
         boolean hasHighestRole = false;
         Role highestRole = null;
 
-        for ( Role r : Objects.requireNonNull(event.getGuild().getMember(event.getJDA().getSelfUser())).getRoles() ) {
-            if(r.equals(event.getGuild().getRoles().get(0))) {
+        for (Role r : Objects.requireNonNull(event.getGuild().getMember(event.getJDA().getSelfUser())).getRoles()) {
+            if (r.equals(event.getGuild().getRoles().get(0))) {
                 hasHighestRole = true;
                 highestRole = r;
             }
@@ -287,8 +287,8 @@ public class CommandListener extends ListenerAdapter {
 
         if (hasHighestRole) {
             if (Objects.requireNonNull(event.getMessage().getMember()).hasPermission(Permission.MANAGE_ROLES)) {
-                for ( Role r : event.getGuild().getRoles() ) {
-                    if(r.getPosition() != highestRole.getPosition()) {
+                for (Role r : event.getGuild().getRoles()) {
+                    if (r.getPosition() != highestRole.getPosition()) {
                         r.getManager().setColor(new Color(0, 0, 0)).queue();
                     }
                 }
@@ -404,38 +404,38 @@ public class CommandListener extends ListenerAdapter {
 
     private void autoWhitelist(MessageReceivedEvent event, String message) {
         if (Objects.requireNonNull(event.getMessage().getMember()).hasPermission(Permission.MANAGE_SERVER)) {
-                if(message.equalsIgnoreCase("on") || message.equalsIgnoreCase("off")) {
-                    switch(message) {
-                        case "off":
-                            SQLHandler.onUpdate("UPDATE autoWhitelist set state=0 WHERE guildid=" + event.getGuild().getIdLong());
-                            event.getChannel().sendMessage(new EmbedBuilder()
-                                    .setTitle("Success")
-                                    .setDescription("New ColorRoles will now not be added to the whitelist upon creation")
-                                    .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
-                                    .setColor(Color.GREEN)
-                                    .setFooter("Developed by DeinAlbtraum#6224")
-                                    .build()).queue();
-                            break;
-                        case "on":
-                            SQLHandler.onUpdate("UPDATE autoWhitelist set state=1 WHERE guildid=" + event.getGuild().getIdLong());
-                            event.getChannel().sendMessage(new EmbedBuilder()
-                                    .setTitle("Success")
-                                    .setDescription("New ColorRoles will now be added to the whitelist upon creation")
-                                    .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
-                                    .setColor(Color.GREEN)
-                                    .setFooter("Developed by DeinAlbtraum#6224")
-                                    .build()).queue();
-                            break;
-                    }
-                } else {
-                    event.getChannel().sendMessage(new EmbedBuilder()
-                            .setTitle("Error")
-                            .setDescription("Please enter off to disable the auto-whitelist feature and on to enable it!")
-                            .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
-                            .setColor(Color.RED)
-                            .setFooter("Developed by DeinAlbtraum#6224")
-                            .build()).queue();
+            if (message.equalsIgnoreCase("on") || message.equalsIgnoreCase("off")) {
+                switch (message) {
+                    case "off":
+                        SQLHandler.onUpdate("UPDATE autoWhitelist set state=0 WHERE guildid=" + event.getGuild().getIdLong());
+                        event.getChannel().sendMessage(new EmbedBuilder()
+                                .setTitle("Success")
+                                .setDescription("New ColorRoles will now not be added to the whitelist upon creation")
+                                .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
+                                .setColor(Color.GREEN)
+                                .setFooter("Developed by DeinAlbtraum#6224")
+                                .build()).queue();
+                        break;
+                    case "on":
+                        SQLHandler.onUpdate("UPDATE autoWhitelist set state=1 WHERE guildid=" + event.getGuild().getIdLong());
+                        event.getChannel().sendMessage(new EmbedBuilder()
+                                .setTitle("Success")
+                                .setDescription("New ColorRoles will now be added to the whitelist upon creation")
+                                .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
+                                .setColor(Color.GREEN)
+                                .setFooter("Developed by DeinAlbtraum#6224")
+                                .build()).queue();
+                        break;
                 }
+            } else {
+                event.getChannel().sendMessage(new EmbedBuilder()
+                        .setTitle("Error")
+                        .setDescription("Please enter off to disable the auto-whitelist feature and on to enable it!")
+                        .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
+                        .setColor(Color.RED)
+                        .setFooter("Developed by DeinAlbtraum#6224")
+                        .build()).queue();
+            }
         } else {
             event.getChannel().sendMessage(new EmbedBuilder()
                     .setTitle("Permission not found")
@@ -507,7 +507,7 @@ public class CommandListener extends ListenerAdapter {
             }
             if (roles.size() != 0) {
                 Role highestRole = Objects.requireNonNull(event.getGuild().getMember(event.getJDA().getSelfUser())).getRoles().get(0);
-                for ( Role r : event.getMessage().getMentionedRoles() ) {
+                for (Role r : event.getMessage().getMentionedRoles()) {
                     if (roles.contains(r)) {
                         if (r.getPosition() < Objects.requireNonNull(highestRole).getPosition()) {
                             event.getGuild().addRoleToMember(Objects.requireNonNull(event.getMessage().getMember()), r).queue();
@@ -1289,13 +1289,13 @@ public class CommandListener extends ListenerAdapter {
     }
 
     private void whitelistWord(MessageReceivedEvent event, String message) {
-        if(Objects.requireNonNull(event.getMessage().getMember()).hasPermission(Permission.MANAGE_ROLES)) {
+        if (Objects.requireNonNull(event.getMessage().getMember()).hasPermission(Permission.MANAGE_ROLES)) {
             StringBuilder builder = new StringBuilder();
             String[] messageSplit = message.split(" ");
 
-            for ( String s : messageSplit ) {
+            for (String s : messageSplit) {
                 if (s.endsWith(",")) {
-                    s = s.substring(0, s.length() -1);
+                    s = s.substring(0, s.length() - 1);
                 }
                 SQLHandler.onUpdate("DELETE FROM wordRestrictions_" + event.getGuild().getId() + " WHERE word='" + s.toLowerCase() + "'");
                 builder.append(s).append("\n");
@@ -1306,7 +1306,7 @@ public class CommandListener extends ListenerAdapter {
                     .setColor(Color.GREEN)
                     .setFooter("Developed by DeinAlbtraum#6224")
                     .build()).queue();
-        } else{
+        } else {
             event.getChannel().sendMessage(new EmbedBuilder()
                     .setTitle("Permission not found")
                     .setDescription("You don't have the Permission to whitelist words! The Permission needed is: `Permission.MANAGE_ROLES`")
@@ -1318,13 +1318,13 @@ public class CommandListener extends ListenerAdapter {
     }
 
     private void blacklistWord(MessageReceivedEvent event, String message) {
-        if(Objects.requireNonNull(event.getMessage().getMember()).hasPermission(Permission.MANAGE_ROLES)) {
+        if (Objects.requireNonNull(event.getMessage().getMember()).hasPermission(Permission.MANAGE_ROLES)) {
             StringBuilder builder = new StringBuilder();
             String[] messageSplit = message.split(" ");
 
-            for ( String s : messageSplit ) {
+            for (String s : messageSplit) {
                 if (s.endsWith(",")) {
-                    s = s.substring(0, s.length() -1);
+                    s = s.substring(0, s.length() - 1);
                 }
                 SQLHandler.onUpdate("INSERT OR IGNORE INTO wordRestrictions_" + event.getGuild().getIdLong() + "(word) VALUES('" + s.toLowerCase() + "')");
                 builder.append(s).append("\n");
@@ -1335,7 +1335,7 @@ public class CommandListener extends ListenerAdapter {
                     .setColor(Color.GREEN)
                     .setFooter("Developed by DeinAlbtraum#6224")
                     .build()).queue();
-        } else{
+        } else {
             event.getChannel().sendMessage(new EmbedBuilder()
                     .setTitle("Permission not found")
                     .setDescription("You don't have the Permission to blacklist words! The Permission needed is: `Permission.MANAGE_ROLES`")
@@ -1406,7 +1406,7 @@ public class CommandListener extends ListenerAdapter {
     }
 
     private void whitelistRoleForCreate(MessageReceivedEvent event) {
-        if(Objects.requireNonNull(event.getMessage().getMember()).hasPermission(Permission.MANAGE_ROLES)) {
+        if (Objects.requireNonNull(event.getMessage().getMember()).hasPermission(Permission.MANAGE_ROLES)) {
             StringBuilder builder = new StringBuilder();
             if (!event.getMessage().getMentionedRoles().isEmpty()) {
                 SQLHandler.onUpdate("INSERT OR IGNORE INTO  createRestrictions_" + event.getGuild().getIdLong() + "(roleid) VALUES(" + event.getMessage().getMentionedRoles().get(0).getIdLong() + ")");
@@ -1445,14 +1445,14 @@ public class CommandListener extends ListenerAdapter {
     }
 
     private void blacklistRoleForCreate(MessageReceivedEvent event) {
-        if(Objects.requireNonNull(event.getMessage().getMember()).hasPermission(Permission.MANAGE_ROLES)) {
+        if (Objects.requireNonNull(event.getMessage().getMember()).hasPermission(Permission.MANAGE_ROLES)) {
             StringBuilder builder = new StringBuilder();
 
             SQLHandler.onUpdate("DELETE FROM createRestrictions_" + event.getGuild().getId() + " WHERE roleid=" + event.getMessage().getMentionedRoles().get(0).getIdLong());
             builder.append(event.getMessage().getMentionedRoles().get(0).getName());
 
             if (event.getMessage().getMentionedRoles().size() > 1) {
-                for (int x = 1; x < event.getMessage().getMentionedRoles().size(); x++ ) {
+                for (int x = 1; x < event.getMessage().getMentionedRoles().size(); x++) {
                     SQLHandler.onUpdate("DELETE FROM createRestrictions_" + event.getGuild().getId() + " WHERE roleid=" + event.getMessage().getMentionedRoles().get(x).getIdLong());
                     builder.append("\n ").append(event.getMessage().getMentionedRoles().get(x).getName());
                 }
@@ -1574,7 +1574,7 @@ public class CommandListener extends ListenerAdapter {
                         .setTitle("Help")
                         .addField("Usage", "<prefix> whitelist <mention (multiple) roles to whitelist here>", false)
                         .addField("Description", "The whitelist command is used to manually add roles to the whitelist.\n To perform this command the user needs the Permission `Permission.MANAGE_ROLES`. \nThe whitelist is used for the assign and remove command.", false)
-                        .addField("See also" ,"assign \n remove \n blacklist", false)
+                        .addField("See also", "assign \n remove \n blacklist", false)
                         .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
                         .setColor(ColorBot.orange)
                         .setFooter("Developed by DeinAlbtraum#6224")
@@ -1595,7 +1595,7 @@ public class CommandListener extends ListenerAdapter {
                         .setTitle("Help")
                         .addField("Usage", "<prefix> blacklist <mention (multiple) roles to blacklist here>", false)
                         .addField("Description", "The blacklist command is used to manually remove roles from the whitelist.\n To perform this command the user needs the Permission `Permission.MANAGE_ROLES`. \nThe whitelist is used for the assign and remove command.", false)
-                        .addField("See also", "assign \n remove \n whitelist" , false)
+                        .addField("See also", "assign \n remove \n whitelist", false)
                         .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
                         .setColor(ColorBot.orange)
                         .setFooter("Developed by DeinAlbtraum#6224")
@@ -1656,7 +1656,7 @@ public class CommandListener extends ListenerAdapter {
                         .setTitle("Help")
                         .addField("Usage", "<prefix> assign <mention (multiple) roles to assign yourself here>", false)
                         .addField("Description", "The assign command is used to give yourself roles that already exist.\n This only works with roles in the whitelist.\n To perform this command no permission is needed.", false)
-                        .addField("See also", "remove \n whitelist \n blacklist \n assignable" , false)
+                        .addField("See also", "remove \n whitelist \n blacklist \n assignable", false)
                         .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
                         .setColor(ColorBot.orange)
                         .setFooter("Developed by DeinAlbtraum#6224")
@@ -1689,7 +1689,7 @@ public class CommandListener extends ListenerAdapter {
                         .setTitle("Help")
                         .addField("Usage", "<prefix> blacklist-words <(multiple) words to blacklist here>", false)
                         .addField("Description", "The blacklist-words command is used to add words to the blacklist. The words are not case-sensitive.\n To perform this command the user needs the Permission `Permission.MANAGE_ROLES`. \nWords in the blacklist can **NOT** be used in the create command.", false)
-                        .addField("See also", "create \n whitelist-words" , false)
+                        .addField("See also", "create \n whitelist-words", false)
                         .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
                         .setColor(ColorBot.orange)
                         .setFooter("Developed by DeinAlbtraum#6224")
@@ -1700,7 +1700,7 @@ public class CommandListener extends ListenerAdapter {
                         .setTitle("Help")
                         .addField("Usage", "<prefix> whitelist-words <(multiple) words to whitelist here>", false)
                         .addField("Description", "The whitelist-words command is used to remove words from the blacklist. The words are not case-sensitive.\n To perform this command the user needs the Permission `Permission.MANAGE_ROLES`. \nWords in the blacklist can **NOT** be used in the create command.", false)
-                        .addField("See also", "create \n blacklist-words \n words-blacklisted" , false)
+                        .addField("See also", "create \n blacklist-words \n words-blacklisted", false)
                         .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
                         .setColor(ColorBot.orange)
                         .setFooter("Developed by DeinAlbtraum#6224")
@@ -1722,7 +1722,7 @@ public class CommandListener extends ListenerAdapter {
                         .setTitle("Help")
                         .addField("Usage", "<prefix> create-whitelist <mention (multiple) roles to whitelist here>", false)
                         .addField("Description", "The create-whitelist command is used to add roles to the whitelist for the create-command.\n To perform this command the user needs the Permission `Permission.MANAGE_ROLES`. \nOnly roles in the whitelist will be able to use the create command. If the whitelist is empty, everybody can use the command. \n In addition, users with the permission `Permission.MANAGE_ROLES` will not be affected by this.", false)
-                        .addField("See also", "create \n create-blacklist \n can-create" , false)
+                        .addField("See also", "create \n create-blacklist \n can-create", false)
                         .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
                         .setColor(ColorBot.orange)
                         .setFooter("Developed by DeinAlbtraum#6224")
@@ -1733,7 +1733,7 @@ public class CommandListener extends ListenerAdapter {
                         .setTitle("Help")
                         .addField("Usage", "<prefix> create-blacklist <mention (multiple) roles to blacklist here>", false)
                         .addField("Description", "The create-blacklist command is used to remove roles from the whitelist for the create-command.\n To perform this command the user needs the Permission `Permission.MANAGE_ROLES`. \n Only roles in the whitelist will be able to use the create command. If the whitelist is empty, everybody can use the command. \n In addition, users with the permission `Permission.MANAGE_ROLES` will not be affected by this.", false)
-                        .addField("See also", "create \n create-whitelist \n can-create" , false)
+                        .addField("See also", "create \n create-whitelist \n can-create", false)
                         .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
                         .setColor(ColorBot.orange)
                         .setFooter("Developed by DeinAlbtraum#6224")
@@ -1781,7 +1781,7 @@ public class CommandListener extends ListenerAdapter {
 
                         event.getChannel().sendMessage(new EmbedBuilder()
                                 .setTitle("Help")
-                                .setDescription("Default Prefixes (these work on every server the bot is on): `!color`, `!c` \n Prefix on this server: `" + customPrefix +"`\n \n \n \n These commands exist. Write <prefix> help <command> to get more information on how to use the command.\n \n **General** \n create \n assign \n remove \n assignable \n words-blacklisted \n help \n \n **Special** \n whitelist \n blacklist \n whitelist-words \n blacklist-words \n remote-delete \n transparent-all \n create-whitelist \n create-blacklist \n can-create \n \n **Settings** \n set-prefix \n set-role-position \n auto-whitelist \n role-amount")
+                                .setDescription("Default Prefixes (these work on every server the bot is on): `!color`, `!c` \n Prefix on this server: `" + customPrefix + "`\n \n \n \n These commands exist. Write <prefix> help <command> to get more information on how to use the command.\n \n **General** \n create \n assign \n remove \n assignable \n words-blacklisted \n help \n \n **Special** \n whitelist \n blacklist \n whitelist-words \n blacklist-words \n remote-delete \n transparent-all \n create-whitelist \n create-blacklist \n can-create \n \n **Settings** \n set-prefix \n set-role-position \n auto-whitelist \n role-amount")
                                 .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
                                 .setColor(ColorBot.orange)
                                 .setFooter("Developed by DeinAlbtraum#6224")
@@ -1811,9 +1811,9 @@ public class CommandListener extends ListenerAdapter {
         }
     }
 
-    private boolean hasRoleSpace(MessageReceivedEvent event, int amountOfRolesAdded)  {
+    private boolean hasRoleSpace(MessageReceivedEvent event, int amountOfRolesAdded) {
         ResultSet result = SQLHandler.onQuery("SELECT roleid FROM _" + event.getGuild().getIdLong());
-        ResultSet limitSet = SQLHandler.onQuery("SELECT amount FROM assignAmount WHERE guildid=" +  event.getGuild().getIdLong());
+        ResultSet limitSet = SQLHandler.onQuery("SELECT amount FROM assignAmount WHERE guildid=" + event.getGuild().getIdLong());
         long limit = 0;
         long rolesFromWhitelistFound = 0;
         ArrayList<Role> roles = new ArrayList<>();
@@ -1853,7 +1853,7 @@ public class CommandListener extends ListenerAdapter {
             System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
         }
 
-        for ( Role r : Objects.requireNonNull(event.getMessage().getMember()).getRoles() ) {
+        for (Role r : Objects.requireNonNull(event.getMessage().getMember()).getRoles()) {
             if (roles.contains(r)) {
                 rolesFromWhitelistFound++;
             }
