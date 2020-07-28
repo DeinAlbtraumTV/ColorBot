@@ -1047,11 +1047,12 @@ public class CommandListener extends ListenerAdapter {
                             blacklistedWords.add(resultBlacklist.getString("word"));
                         } while (resultBlacklist.next());
                     }
-
-                    for (String s : blacklistedWords) {
-                        if (name.toLowerCase().contains(s.toLowerCase())) {
-                            nameContainsBlacklisted = true;
-                            break;
+                    if (!event.getMessage().getMember().hasPermission(Permission.MANAGE_ROLES)) {
+                        for (String s : blacklistedWords) {
+                            if (name.toLowerCase().contains(s.toLowerCase())) {
+                                nameContainsBlacklisted = true;
+                                break;
+                            }
                         }
                     }
 
@@ -1688,7 +1689,7 @@ public class CommandListener extends ListenerAdapter {
                 event.getChannel().sendMessage(new EmbedBuilder()
                         .setTitle("Help")
                         .addField("Usage", "<prefix> blacklist-words <(multiple) words to blacklist here>", false)
-                        .addField("Description", "The blacklist-words command is used to add words to the blacklist. The words are not case-sensitive.\n To perform this command the user needs the Permission `Permission.MANAGE_ROLES`. \nWords in the blacklist can **NOT** be used in the create command.", false)
+                        .addField("Description", "The blacklist-words command is used to add words to the blacklist. The words are not case-sensitive.\n To perform this command the user needs the Permission `Permission.MANAGE_ROLES`. In addition, users with the Permission `Permission.MANAGE_ROLES` override the blacklist. \nWords in the blacklist can **NOT** be used in the create command.", false)
                         .addField("See also", "create \n whitelist-words", false)
                         .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
                         .setColor(ColorBot.orange)
@@ -1699,7 +1700,7 @@ public class CommandListener extends ListenerAdapter {
                 event.getChannel().sendMessage(new EmbedBuilder()
                         .setTitle("Help")
                         .addField("Usage", "<prefix> whitelist-words <(multiple) words to whitelist here>", false)
-                        .addField("Description", "The whitelist-words command is used to remove words from the blacklist. The words are not case-sensitive.\n To perform this command the user needs the Permission `Permission.MANAGE_ROLES`. \nWords in the blacklist can **NOT** be used in the create command.", false)
+                        .addField("Description", "The whitelist-words command is used to remove words from the blacklist. The words are not case-sensitive.\n To perform this command the user needs the Permission `Permission.MANAGE_ROLES`. In addition, users with the Permission `Permission.MANAGE_ROLES` override the blacklist. \nWords in the blacklist can **NOT** be used in the create command.", false)
                         .addField("See also", "create \n blacklist-words \n words-blacklisted", false)
                         .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
                         .setColor(ColorBot.orange)
