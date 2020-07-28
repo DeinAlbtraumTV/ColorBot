@@ -43,6 +43,11 @@ public class OnReadyListener extends ListenerAdapter {
             @Override
             public void run() {
 
+                if (jda.getShardInfo().getShardId() == 0) {
+                    ColorBot.members = 0L;
+                    ColorBot.servers = 0L;
+                }
+
                 System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
                 System.out.println("[ColorBot ColorBot-Thread] Info - Starting Database Repair");
 
