@@ -6,8 +6,6 @@ import net.dv8tion.jda.api.events.guild.GuildBanEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import javax.annotation.Nonnull;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class OnGuildBanListener extends ListenerAdapter {
 

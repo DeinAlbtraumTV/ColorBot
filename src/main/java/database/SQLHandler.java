@@ -1,11 +1,9 @@
 package database;
 
-import java.io.File;
-import java.io.IOException;
+import commons.Database;
 import java.sql.*;
 
 public class SQLHandler {
-
     private static Connection connection;
 
     public static void connect(boolean logOutput) {
@@ -15,37 +13,21 @@ public class SQLHandler {
         try {
             if (logOutput) {
 
-                System.out.println("[ColorBot ColorBot-Thread] INFO - Attempting to connect to database");
+                System.out.println("[ModuleBot Database] INFO - Attempting to connect to database");
 
-                File databaseFile = new File("database.db");
-
-                if (!databaseFile.exists()) {
-                    if (!databaseFile.createNewFile()) {
-                        throw new IOException();
-                    }
-                }
-
-                String url = "jdbc:sqlite:" + databaseFile.getPath();
+                String url = "jdbc:mysql://" + Database.host + "/" + Database.database + "?user=" + Database.user + "&password="+ Database.password + "&useLegacyDatetimeCode=false&serverTimezone=" + Database.timezone;
 
                 connection = DriverManager.getConnection(url);
 
-                System.out.println("[ColorBot ColorBot-Thread] INFO - Connected to database");
+                System.out.println("[ModuleBot Database] INFO - Connected to database");
             }
             else {
-                File databaseFile = new File("database.db");
-
-                if (!databaseFile.exists()) {
-                    if (!databaseFile.createNewFile()) {
-                        throw new IOException();
-                    }
-                }
-
-                String url = "jdbc:sqlite:" + databaseFile.getPath();
+                String url = "jdbc:mysql://" + Database.host + "/" + Database.database + "?user=" + Database.user + "&password="+ Database.password + "&useLegacyDatetimeCode=false&serverTimezone=" + Database.timezone;
 
                 connection = DriverManager.getConnection(url);
             }
-        } catch (SQLException | IOException e) {
-            System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to connect to database");
+        } catch (SQLException e) {
+            System.out.println("[ModuleBot Database] ERROR - An error occurred while trying to connect to database");
             e.printStackTrace();
         }
     }
@@ -54,13 +36,13 @@ public class SQLHandler {
 
         try {
             if (logOutput) {
-                System.out.println("[ColorBot ColorBot-Thread] INFO - Attempting to disconnect from database");
+                System.out.println("[ModuleBot Database] INFO - Attempting to disconnect from database");
 
                 if (connection != null) {
                     connection.close();
                 }
 
-                System.out.println("[ColorBot ColorBot-Thread] INFO - Disconnected from database");
+                System.out.println("[ModuleBot Database] INFO - Disconnected from database");
             }
             else {
                 if (connection != null) {
@@ -68,17 +50,17 @@ public class SQLHandler {
                 }
             }
         } catch (SQLException e) {
-            System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to disconnect from database");
+            System.out.println("[ModuleBot Database] ERROR - An error occurred while trying to disconnect from database");
             e.printStackTrace();
         }
     }
 
     public static void onUpdate(String sql) {
         try {
-            if (sql.startsWith("DROP")) {
+            /*if (sql.startsWith("DROP")) {
                 disconnect(false);
                 connect(false);
-            }
+            }*/
             Statement stmt = connection.createStatement();
             stmt.execute(sql);
         } catch (SQLException e) {

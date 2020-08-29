@@ -5,7 +5,9 @@ import main.ColorBot;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.ChannelType;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -126,6 +128,27 @@ public class CommandListener extends ListenerAdapter {
         }
     }
 
+    private void setPrefix(MessageReceivedEvent event, String message) {
+        if (Objects.requireNonNull(event.getMessage().getMember()).hasPermission(Permission.MANAGE_SERVER)) {
+            SQLHandler.onUpdate("UPDATE customPrefix SET prefix=\"" + message + "\" WHERE guildid=" + event.getGuild().getIdLong());
+            event.getChannel().sendMessage(new EmbedBuilder()
+                    .setTitle("Success")
+                    .setDescription("The prefix has been set to: `" + message + "`")
+                    .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
+                    .setColor(Color.GREEN)
+                    .setFooter("Developed by DeinAlbtraum#6224")
+                    .build()).queue();
+        } else {
+            event.getChannel().sendMessage(new EmbedBuilder()
+                    .setTitle("Permission not found")
+                    .setDescription("You don't have the Permission to set a new Prefix! The Permission needed is: `Permission.MANAGE_SERVER`")
+                    .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
+                    .setColor(Color.RED)
+                    .setFooter("Developed by DeinAlbtraum#6224")
+                    .build()).queue();
+        }
+    }
+
     private void whitelistRole(MessageReceivedEvent event) {
         if (Objects.requireNonNull(event.getMessage().getMember()).hasPermission(Permission.MANAGE_ROLES)) {
             StringBuilder builder = new StringBuilder();
@@ -165,27 +188,6 @@ public class CommandListener extends ListenerAdapter {
         }
     }
 
-    private void setPrefix(MessageReceivedEvent event, String message) {
-        if (Objects.requireNonNull(event.getMessage().getMember()).hasPermission(Permission.MANAGE_SERVER)) {
-            SQLHandler.onUpdate("UPDATE customPrefix SET prefix=\"" + message + "\" WHERE guildid=" + event.getGuild().getIdLong());
-            event.getChannel().sendMessage(new EmbedBuilder()
-                    .setTitle("Success")
-                    .setDescription("The prefix has been set to: `" + message + "`")
-                    .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
-                    .setColor(Color.GREEN)
-                    .setFooter("Developed by DeinAlbtraum#6224")
-                    .build()).queue();
-        } else {
-            event.getChannel().sendMessage(new EmbedBuilder()
-                    .setTitle("Permission not found")
-                    .setDescription("You don't have the Permission to set a new Prefix! The Permission needed is: `Permission.MANAGE_SERVER`")
-                    .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
-                    .setColor(Color.RED)
-                    .setFooter("Developed by DeinAlbtraum#6224")
-                    .build()).queue();
-        }
-    }
-
     private void blacklistRole(MessageReceivedEvent event) {
         if (Objects.requireNonNull(event.getMessage().getMember()).hasPermission(Permission.MANAGE_ROLES)) {
             StringBuilder builder = new StringBuilder();
@@ -209,6 +211,51 @@ public class CommandListener extends ListenerAdapter {
             event.getChannel().sendMessage(new EmbedBuilder()
                     .setTitle("Permission not found")
                     .setDescription("You don't have the Permission to blacklist Roles! The Permission needed is: `Permission.MANAGE_ROLES`")
+                    .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
+                    .setColor(Color.RED)
+                    .setFooter("Developed by DeinAlbtraum#6224")
+                    .build()).queue();
+        }
+    }
+
+    private void autoWhitelist(MessageReceivedEvent event, String message) {
+        if (Objects.requireNonNull(event.getMessage().getMember()).hasPermission(Permission.MANAGE_SERVER)) {
+            if (message.equalsIgnoreCase("on") || message.equalsIgnoreCase("off")) {
+                switch (message) {
+                    case "off":
+                        SQLHandler.onUpdate("UPDATE autoWhitelist set state=0 WHERE guildid=" + event.getGuild().getIdLong());
+                        event.getChannel().sendMessage(new EmbedBuilder()
+                                .setTitle("Success")
+                                .setDescription("New ColorRoles will now not be added to the whitelist upon creation")
+                                .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
+                                .setColor(Color.GREEN)
+                                .setFooter("Developed by DeinAlbtraum#6224")
+                                .build()).queue();
+                        break;
+                    case "on":
+                        SQLHandler.onUpdate("UPDATE autoWhitelist set state=1 WHERE guildid=" + event.getGuild().getIdLong());
+                        event.getChannel().sendMessage(new EmbedBuilder()
+                                .setTitle("Success")
+                                .setDescription("New ColorRoles will now be added to the whitelist upon creation")
+                                .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
+                                .setColor(Color.GREEN)
+                                .setFooter("Developed by DeinAlbtraum#6224")
+                                .build()).queue();
+                        break;
+                }
+            } else {
+                event.getChannel().sendMessage(new EmbedBuilder()
+                        .setTitle("Error")
+                        .setDescription("Please enter off to disable the auto-whitelist feature and on to enable it!")
+                        .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
+                        .setColor(Color.RED)
+                        .setFooter("Developed by DeinAlbtraum#6224")
+                        .build()).queue();
+            }
+        } else {
+            event.getChannel().sendMessage(new EmbedBuilder()
+                    .setTitle("Permission not found")
+                    .setDescription("You don't have the Permission to set the auto-whitelist feature! The Permission needed is: `Permission.MANAGE_SERVER`")
                     .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
                     .setColor(Color.RED)
                     .setFooter("Developed by DeinAlbtraum#6224")
@@ -402,35 +449,24 @@ public class CommandListener extends ListenerAdapter {
         }
     }
 
-    private void autoWhitelist(MessageReceivedEvent event, String message) {
-        if (Objects.requireNonNull(event.getMessage().getMember()).hasPermission(Permission.MANAGE_SERVER)) {
-            if (message.equalsIgnoreCase("on") || message.equalsIgnoreCase("off")) {
-                switch (message) {
-                    case "off":
-                        SQLHandler.onUpdate("UPDATE autoWhitelist set state=0 WHERE guildid=" + event.getGuild().getIdLong());
-                        event.getChannel().sendMessage(new EmbedBuilder()
-                                .setTitle("Success")
-                                .setDescription("New ColorRoles will now not be added to the whitelist upon creation")
-                                .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
-                                .setColor(Color.GREEN)
-                                .setFooter("Developed by DeinAlbtraum#6224")
-                                .build()).queue();
-                        break;
-                    case "on":
-                        SQLHandler.onUpdate("UPDATE autoWhitelist set state=1 WHERE guildid=" + event.getGuild().getIdLong());
-                        event.getChannel().sendMessage(new EmbedBuilder()
-                                .setTitle("Success")
-                                .setDescription("New ColorRoles will now be added to the whitelist upon creation")
-                                .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
-                                .setColor(Color.GREEN)
-                                .setFooter("Developed by DeinAlbtraum#6224")
-                                .build()).queue();
-                        break;
-                }
-            } else {
+    private void setMaxAssignAmount(MessageReceivedEvent event, String message) {
+        if (Objects.requireNonNull(event.getMessage().getMember()).hasPermission(Permission.MANAGE_ROLES)) {
+            try {
+                long amount = Long.parseLong(message);
+                SQLHandler.onUpdate("UPDATE assignAmount set amount=" + amount + " WHERE guildid=" + event.getGuild().getIdLong());
+
+                event.getChannel().sendMessage(new EmbedBuilder()
+                        .setTitle("Success")
+                        .setDescription("The max amount of assignable roles per user has been set to: " + amount)
+                        .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
+                        .setColor(Color.GREEN)
+                        .setFooter("Developed by DeinAlbtraum#6224")
+                        .build()).queue();
+
+            } catch (Exception e) {
                 event.getChannel().sendMessage(new EmbedBuilder()
                         .setTitle("Error")
-                        .setDescription("Please enter off to disable the auto-whitelist feature and on to enable it!")
+                        .setDescription("Please enter a valid number!")
                         .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
                         .setColor(Color.RED)
                         .setFooter("Developed by DeinAlbtraum#6224")
@@ -439,16 +475,12 @@ public class CommandListener extends ListenerAdapter {
         } else {
             event.getChannel().sendMessage(new EmbedBuilder()
                     .setTitle("Permission not found")
-                    .setDescription("You don't have the Permission to set the auto-whitelist feature! The Permission needed is: `Permission.MANAGE_SERVER`")
+                    .setDescription("You don't have the Permission to set the max amount of roles a user can assign! The Permission needed is: `Permission.MANAGE_ROLES`")
                     .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
                     .setColor(Color.RED)
                     .setFooter("Developed by DeinAlbtraum#6224")
                     .build()).queue();
         }
-    }
-
-    private void easter(MessageReceivedEvent event) {
-        event.getChannel().sendMessage("May i offer you a nice egg in this trying-time? :egg:").queue();
     }
 
     private void assign(MessageReceivedEvent event) {
@@ -1534,38 +1566,8 @@ public class CommandListener extends ListenerAdapter {
         }
     }
 
-    private void setMaxAssignAmount(MessageReceivedEvent event, String message) {
-        if (Objects.requireNonNull(event.getMessage().getMember()).hasPermission(Permission.MANAGE_ROLES)) {
-            try {
-                long amount = Long.parseLong(message);
-                SQLHandler.onUpdate("UPDATE assignAmount set amount=" + amount + " WHERE guildid=" + event.getGuild().getIdLong());
-
-                event.getChannel().sendMessage(new EmbedBuilder()
-                        .setTitle("Success")
-                        .setDescription("The max amount of assignable roles per user has been set to: " + amount)
-                        .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
-                        .setColor(Color.GREEN)
-                        .setFooter("Developed by DeinAlbtraum#6224")
-                        .build()).queue();
-
-            } catch (Exception e) {
-                event.getChannel().sendMessage(new EmbedBuilder()
-                        .setTitle("Error")
-                        .setDescription("Please enter a valid number!")
-                        .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
-                        .setColor(Color.RED)
-                        .setFooter("Developed by DeinAlbtraum#6224")
-                        .build()).queue();
-            }
-        } else {
-            event.getChannel().sendMessage(new EmbedBuilder()
-                    .setTitle("Permission not found")
-                    .setDescription("You don't have the Permission to set the max amount of roles a user can assign! The Permission needed is: `Permission.MANAGE_ROLES`")
-                    .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
-                    .setColor(Color.RED)
-                    .setFooter("Developed by DeinAlbtraum#6224")
-                    .build()).queue();
-        }
+    private void easter(MessageReceivedEvent event) {
+        event.getChannel().sendMessage("May i offer you a nice egg in this trying-time? :egg:").queue();
     }
 
     private void help(MessageReceivedEvent event, String message) {

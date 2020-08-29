@@ -57,9 +57,9 @@ public class OnReadyListener extends ListenerAdapter {
 
                 for (Guild g : event.getJDA().getGuilds()) {
 
-                    SQLHandler.onUpdate("CREATE TABLE IF NOT EXISTS _" + g.getIdLong() + "(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, roleid INTEGER UNIQUE)");
-                    SQLHandler.onUpdate("CREATE TABLE IF NOT EXISTS wordRestrictions_" + g.getIdLong() + "(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, word VARCHAR UNIQUE)");
-                    SQLHandler.onUpdate("CREATE TABLE IF NOT EXISTS createRestrictions_" + g.getIdLong() + "(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, roleid INTEGER UNIQUE)");
+                    SQLHandler.onUpdate("CREATE TABLE IF NOT EXISTS _" + g.getIdLong() + "(id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT, roleid BIGINT UNIQUE)");
+                    SQLHandler.onUpdate("CREATE TABLE IF NOT EXISTS wordRestrictions_" + g.getIdLong() + "(id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT, word VARCHAR(2001) UNIQUE)");
+                    SQLHandler.onUpdate("CREATE TABLE IF NOT EXISTS createRestrictions_" + g.getIdLong() + "(id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT, roleid BIGINT UNIQUE)");
                     SQLHandler.onUpdate("INSERT OR IGNORE INTO customPrefix(guildid) VALUES(" + g.getIdLong() + ")");
                     SQLHandler.onUpdate("INSERT OR IGNORE INTO colorRolePosition(guildid) VALUES(" + g.getIdLong() + ")");
                     SQLHandler.onUpdate("INSERT OR IGNORE INTO autoWhitelist(guildid) VALUES(" + g.getIdLong() + ")");

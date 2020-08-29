@@ -101,6 +101,7 @@ public class ColorBot {
             }
             catch (IOException e) {
                 if (!e.getMessage().equalsIgnoreCase("Stream closed")) {
+                    e.printStackTrace();
                     System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
                     System.out.println("[ColorBot Read-Thread#01 - Shutdown] ERROR - An error occurred while trying to read the console input");
                     System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
