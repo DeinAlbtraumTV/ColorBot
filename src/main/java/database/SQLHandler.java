@@ -1,6 +1,9 @@
 package database;
 
 import commons.Database;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.sql.*;
 
 public class SQLHandler {
@@ -24,9 +27,9 @@ public class SQLHandler {
             else {
                 String url = "jdbc:mysql://" + Database.host + "/" + Database.database + "?user=" + Database.user + "&password="+ Database.password + "&useLegacyDatetimeCode=false&serverTimezone=" + Database.timezone;
 
-                connection = DriverManager.getConnection(url);
+                connection = DriverManager.getConnection(new URI(url).toASCIIString());
             }
-        } catch (SQLException e) {
+        } catch (SQLException | URISyntaxException e) {
             System.out.println("[ModuleBot Database] ERROR - An error occurred while trying to connect to database");
             e.printStackTrace();
         }
