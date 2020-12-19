@@ -1368,7 +1368,7 @@ public class CommandListener extends ListenerAdapter {
                 }
             }
             event.getChannel().sendMessage(new EmbedBuilder()
-                    .setTitle("Success").setDescription("Status: \n " + builder.toString())
+                    .setTitle("Success").setDescription("Blacklisted these words: \n " + builder.toString())
                     .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
                     .setColor(Color.GREEN)
                     .setFooter("Developed by DeinAlbtraum#6224")
