@@ -14,10 +14,10 @@ public class OnGuildJoinListener extends ListenerAdapter {
             SQLHandler.onUpdate("CREATE TABLE IF NOT EXISTS _" + event.getGuild().getIdLong() + "(id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT, roleid BIGINT UNIQUE)");
             SQLHandler.onUpdate("CREATE TABLE IF NOT EXISTS wordRestrictions_" + event.getGuild().getIdLong() + "(id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT, word VARCHAR(2001) UNIQUE)");
             SQLHandler.onUpdate("CREATE TABLE IF NOT EXISTS createRestrictions_" + event.getGuild().getIdLong() + "(id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT, roleid BIGINT UNIQUE)");
-            SQLHandler.onUpdate("INSERT OR IGNORE INTO customPrefix(guildid) VALUES(" + event.getGuild().getIdLong() + ")");
-            SQLHandler.onUpdate("INSERT OR IGNORE INTO colorRolePosition(guildid) VALUES(" + event.getGuild().getIdLong() + ")");
-            SQLHandler.onUpdate("INSERT OR IGNORE INTO autoWhitelist(guildid) VALUES(" + event.getGuild().getIdLong()+")");
-            SQLHandler.onUpdate("INSERT OR IGNORE INTO assignAmount(guildid) VALUES(" + event.getGuild().getIdLong() +")");
+            SQLHandler.onUpdate("INSERT IGNORE INTO customPrefix(guildid) VALUES(" + event.getGuild().getIdLong() + ")");
+            SQLHandler.onUpdate("INSERT IGNORE INTO colorRolePosition(guildid) VALUES(" + event.getGuild().getIdLong() + ")");
+            SQLHandler.onUpdate("INSERT IGNORE INTO autoWhitelist(guildid) VALUES(" + event.getGuild().getIdLong()+")");
+            SQLHandler.onUpdate("INSERT IGNORE INTO assignAmount(guildid) VALUES(" + event.getGuild().getIdLong() +")");
         }
     }
 }

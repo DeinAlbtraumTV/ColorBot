@@ -21,121 +21,114 @@ public class CommandListener extends ListenerAdapter {
     @Override
     public void onMessageReceived(@Nonnull MessageReceivedEvent event) {
 
-        if (!ColorBot.shutdown || event.getAuthor().isBot()) {
+        if (!ColorBot.shutdown && !event.getAuthor().isBot()) {
             if (event.isFromType(ChannelType.TEXT)) {
                 String message = event.getMessage().getContentRaw();
                 ResultSet result = SQLHandler.onQuery("SELECT prefix from customPrefix WHERE guildid=" + event.getGuild().getId());
 
                 try {
-                    if (result != null && !result.isClosed()) {
+                    if (result != null && !result.isClosed() && result.next()) {
                         String customPrefix = result.getString("prefix");
-                        try {
-                            if (message.startsWith("!color ") || message.startsWith("!c ") || message.startsWith((customPrefix) + " ")) {
+                        if (message.startsWith("!color") || message.startsWith((customPrefix))) {
 
-                                if (message.startsWith("!color ")) {
-                                    message = message.substring(("!color ").length());
-                                } else if (message.startsWith("!c ")) {
-                                    message = message.substring(("!c ").length());
-                                } else if (message.startsWith(Objects.requireNonNull(SQLHandler.onQuery("SELECT prefix from customPrefix WHERE guildid=" + event.getGuild().getId())).getString("prefix"))) {
-                                    message = message.substring((Objects.requireNonNull(SQLHandler.onQuery("SELECT prefix from customPrefix WHERE guildid=" + event.getGuild().getId())).getString("prefix") + " ").length());
-                                }
+                            if (message.startsWith("!color")) {
+                                message = message.substring(("!color").length());
+                            } else if (message.startsWith(customPrefix)) {
+                                message = message.substring((customPrefix).length());
+                            }
 
-                                if (message.startsWith("whitelist ")) {
-                                    whitelistRole(event);
-                                } else if (message.startsWith("set-prefix ")) {
-                                    setPrefix(event, message.substring(("set-prefix ").length()));
-                                } else if (message.startsWith("blacklist ")) {
-                                    blacklistRole(event);
-                                } else if (message.startsWith("assignable")) {
-                                    getAssignable(event);
-                                } else if (message.startsWith("transparent-all")) {
-                                    transparentAll(event);
-                                } else if (message.startsWith("remote-delete ")) {
-                                    remoteDelete(event);
-                                } else if (message.startsWith("set-role-position ")) {
-                                    setRolePosition(event);
-                                } else if (message.startsWith("auto-whitelist ")) {
-                                    autoWhitelist(event, message.substring(("auto-whitelist ").length()));
-                                } else if (message.startsWith("assign ")) {
-                                    assign(event);
-                                } else if (message.startsWith("remove ")) {
-                                    remove(event);
-                                } else if (message.startsWith("create ")) {
-                                    create(event, message.substring(("create ").length()));
-                                } else if (message.startsWith("help ")) {
-                                    help(event, message.substring(("help ").length()));
-                                } else if (message.startsWith("help")) {
-                                    help(event, message.substring(("help").length()));
-                                } else if (message.startsWith("whitelist-words ")) {
-                                    whitelistWord(event, message.substring(("whitelist-words ").length()));
-                                } else if (message.startsWith("blacklist-words ")) {
-                                    blacklistWord(event, message.substring(("blacklist-words ").length()));
-                                } else if (message.startsWith("words-blacklisted")) {
-                                    getBlacklistedWords(event);
-                                } else if (message.startsWith("create-whitelist ")) {
-                                    whitelistRoleForCreate(event);
-                                } else if (message.startsWith("create-blacklist ")) {
-                                    blacklistRoleForCreate(event);
-                                } else if (message.startsWith("can-create")) {
-                                    getRolesAbleToCreate(event);
-                                } else if (message.startsWith("role-amount ")) {
-                                    setMaxAssignAmount(event, message.substring(("role-amount ").length()));
-                                } else if (message.startsWith("easter")) {
-                                    easter(event);
-                                } else {
-                                    event.getChannel().sendMessage("Have you tried the help-command yet?").queue();
-                                }
+                            message = message.trim();
+
+                            if (message.startsWith("whitelist ")) {
+                                whitelistRole(event);
+                            } else if (message.startsWith("set-prefix ")) {
+                                setPrefix(event, message.substring(("set-prefix ").length()));
+                            } else if (message.startsWith("blacklist ")) {
+                                blacklistRole(event);
+                            } else if (message.startsWith("assignable")) {
+                                getAssignable(event);
+                            } else if (message.startsWith("transparent-all")) {
+                                transparentAll(event);
+                            } else if (message.startsWith("remote-delete ")) {
+                                remoteDelete(event);
+                            } else if (message.startsWith("set-role-position ")) {
+                                setRolePosition(event);
+                            } else if (message.startsWith("auto-whitelist ")) {
+                                autoWhitelist(event, message.substring(("auto-whitelist ").length()));
+                            } else if (message.startsWith("assign ")) {
+                                assign(event);
+                            } else if (message.startsWith("remove ")) {
+                                remove(event);
+                            } else if (message.startsWith("create ")) {
+                                create(event, message.substring(("create ").length()));
+                            } else if (message.startsWith("help ")) {
+                                help(event, message.substring(("help ").length()));
+                            } else if (message.startsWith("help")) {
+                                help(event, message.substring(("help").length()));
+                            } else if (message.startsWith("whitelist-words ")) {
+                                whitelistWord(event, message.substring(("whitelist-words ").length()));
+                            } else if (message.startsWith("blacklist-words ")) {
+                                blacklistWord(event, message.substring(("blacklist-words ").length()));
+                            } else if (message.startsWith("words-blacklisted")) {
+                                getBlacklistedWords(event);
+                            } else if (message.startsWith("create-whitelist ")) {
+                                whitelistRoleForCreate(event);
+                            } else if (message.startsWith("create-blacklist ")) {
+                                blacklistRoleForCreate(event);
+                            } else if (message.startsWith("can-create")) {
+                                getRolesAbleToCreate(event);
+                            } else if (message.startsWith("role-amount ")) {
+                                setMaxAssignAmount(event, message.substring(("role-amount ").length()));
+                            } else if (message.startsWith("setup")) {
+                                setup(event);
+                            } else if (message.startsWith("easter")) {
+                                easter(event);
+                            } else {
+                                event.getChannel().sendMessage("Have you tried the help-command yet?").queue();
                             }
-                        } catch (SQLException e) {
-                            System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                            System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to retrieve custom prefix from database");
-                            System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                            try {
-                                result.close();
-                            } catch (SQLException sqlE) {
-                                System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                                System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying close a resultSet");
-                                System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                            }
-                            return;
                         }
-                    } else {
-                        return;
                     }
                 } catch (SQLException e) {
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                    System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to retrieve custom prefix from database");
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                    return;
+                        System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                        System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to retrieve custom prefix from database");
+                        System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                        e.printStackTrace();
+                        return;
                 }
                 try {
+                    assert result != null;
                     result.close();
                 } catch (SQLException e) {
                     System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                    System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying close a resultSet");
+                    System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
                     System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
                 }
             } else {
-                try {
-                    if (event.getMessage().getAuthor() != event.getJDA().getSelfUser()) {
-                        event.getChannel().sendMessage("This Bot is not intended to be used in private Channels!").queue();
-                    }
-                } catch (Exception ignore) {
-                }
+                event.getChannel().sendMessage("This Bot is not intended to be used in private Channels!").queue();
             }
         }
     }
 
     private void setPrefix(MessageReceivedEvent event, String message) {
         if (Objects.requireNonNull(event.getMessage().getMember()).hasPermission(Permission.MANAGE_SERVER)) {
-            SQLHandler.onUpdate("UPDATE customPrefix SET prefix=\"" + message + "\" WHERE guildid=" + event.getGuild().getIdLong());
-            event.getChannel().sendMessage(new EmbedBuilder()
-                    .setTitle("Success")
-                    .setDescription("The prefix has been set to: `" + message + "`")
-                    .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
-                    .setColor(Color.GREEN)
-                    .setFooter("Developed by DeinAlbtraum#6224")
-                    .build()).queue();
+            if (message.length() <= 20) {
+                SQLHandler.onUpdate("UPDATE customPrefix SET prefix=\"" + message + "\" WHERE guildid=" + event.getGuild().getIdLong());
+                event.getChannel().sendMessage(new EmbedBuilder()
+                        .setTitle("Success")
+                        .setDescription("The prefix has been set to: `" + message + "`")
+                        .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
+                        .setColor(Color.GREEN)
+                        .setFooter("Developed by DeinAlbtraum#6224")
+                        .build()).queue();
+            } else {
+                event.getChannel().sendMessage(new EmbedBuilder()
+                        .setTitle("Prefix too long")
+                        .setDescription("The Prefix can't be longer than 20 characters!")
+                        .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
+                        .setColor(Color.RED)
+                        .setFooter("Developed by DeinAlbtraum#6224")
+                        .build()).queue();
+            }
         } else {
             event.getChannel().sendMessage(new EmbedBuilder()
                     .setTitle("Permission not found")
@@ -151,12 +144,12 @@ public class CommandListener extends ListenerAdapter {
         if (Objects.requireNonNull(event.getMessage().getMember()).hasPermission(Permission.MANAGE_ROLES)) {
             StringBuilder builder = new StringBuilder();
             if (!event.getMessage().getMentionedRoles().isEmpty()) {
-                SQLHandler.onUpdate("INSERT OR IGNORE INTO  _" + event.getGuild().getId() + "(roleid) VALUES(" + event.getMessage().getMentionedRoles().get(0).getIdLong() + ")");
+                SQLHandler.onUpdate("INSERT IGNORE INTO  _" + event.getGuild().getId() + "(roleid) VALUES(" + event.getMessage().getMentionedRoles().get(0).getIdLong() + ")");
                 builder.append(event.getMessage().getMentionedRoles().get(0).getName());
 
                 if (event.getMessage().getMentionedRoles().size() > 1) {
                     for (int x = 1; x < event.getMessage().getMentionedRoles().size(); x++) {
-                        SQLHandler.onUpdate("INSERT OR IGNORE INTO _" + event.getGuild().getId() + "(roleid) VALUES(" + event.getMessage().getMentionedRoles().get(x).getIdLong() + ")");
+                        SQLHandler.onUpdate("INSERT IGNORE INTO _" + event.getGuild().getId() + "(roleid) VALUES(" + event.getMessage().getMentionedRoles().get(x).getIdLong() + ")");
                         builder.append("\n ").append(event.getMessage().getMentionedRoles().get(x).getName());
                     }
                 }
@@ -731,7 +724,7 @@ public class CommandListener extends ListenerAdapter {
             if (result == null) {
                 event.getChannel().sendMessage(new EmbedBuilder()
                         .setTitle("Error")
-                        .setDescription("An Error occurred while creating the role.\n \nPlease try again later.\nIf this error persists please make a bug report in my support-server!")
+                        .setDescription("No position for ColorRoles to be placed is defined for this guild.\n \nPlease try again later.\nIf this error persists please make a bug report in my support-server!\nError-Code: result=null")
                         .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
                         .setColor(Color.RED)
                         .setFooter("Developed by DeinAlbtraum#6224")
@@ -767,7 +760,7 @@ public class CommandListener extends ListenerAdapter {
             if (resultSet == null) {
                 event.getChannel().sendMessage(new EmbedBuilder()
                         .setTitle("Error")
-                        .setDescription("An Error occurred while creating the role.\n \nPlease try again later.\nIf this error persists please make a bug report in my support-server!")
+                        .setDescription("An Error occurred while creating the role.\n \nPlease try again later.\nIf this error persists please make a bug report in my support-server!\nError-Code: resultSet=null")
                         .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
                         .setColor(Color.RED)
                         .setFooter("Developed by DeinAlbtraum#6224")
@@ -803,7 +796,7 @@ public class CommandListener extends ListenerAdapter {
             if (resultBlacklist == null) {
                 event.getChannel().sendMessage(new EmbedBuilder()
                         .setTitle("Error")
-                        .setDescription("An Error occurred while creating the role.\n \nPlease try again later.\nIf this error persists please make a bug report in my support-server!")
+                        .setDescription("An Error occurred while creating the role.\n \nPlease try again later.\nIf this error persists please make a bug report in my support-server!\nError-Code: resultBlacklist=null")
                         .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
                         .setColor(Color.RED)
                         .setFooter("Developed by DeinAlbtraum#6224")
@@ -839,7 +832,7 @@ public class CommandListener extends ListenerAdapter {
             if (createRestrictions == null) {
                 event.getChannel().sendMessage(new EmbedBuilder()
                         .setTitle("Error")
-                        .setDescription("An Error occurred while creating the role.\n \nPlease try again later.\nIf this error persists please make a bug report in my support-server!")
+                        .setDescription("An Error occurred while creating the role.\n \nPlease try again later.\nIf this error persists please make a bug report in my support-server!\nError-Code: resultRestrictions=null")
                         .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
                         .setColor(Color.RED)
                         .setFooter("Developed by DeinAlbtraum#6224")
@@ -873,48 +866,58 @@ public class CommandListener extends ListenerAdapter {
             }
 
             try {
-                if (result.getString("roleid") == null) {
+                if (result.next()) {
+                    if (result.getString("roleid") == null) {
+                        event.getChannel().sendMessage(new EmbedBuilder()
+                                .setTitle("Error")
+                                .setDescription("No position for ColorRoles to be placed is defined for this guild.\n Please report this to the team of this server.")
+                                .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
+                                .setColor(Color.RED)
+                                .setFooter("Developed by DeinAlbtraum#6224")
+                                .build()).queue();
+
+                        try {
+                            result.close();
+                        } catch (SQLException e) {
+                            System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                            System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
+                            System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                        }
+
+                        try {
+                            resultSet.close();
+                        } catch (SQLException sqlE) {
+                            System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                            System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
+                            System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                        }
+
+                        try {
+                            resultBlacklist.close();
+                        } catch (SQLException sqlE) {
+                            System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                            System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
+                            System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                        }
+
+                        try {
+                            Objects.requireNonNull(createRestrictions).close();
+                        } catch (SQLException e) {
+                            System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                            System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
+                            System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                        }
+
+                        return;
+                    }
+                } else {
                     event.getChannel().sendMessage(new EmbedBuilder()
                             .setTitle("Error")
-                            .setDescription("No position for ColorRoles to be placed is defined for this guild.\n Please report this to the team of this server.")
+                            .setDescription("An Error occurred while creating the role.\n \nPlease try again later.\nIf this error persists please make a bug report in my support-server!\nError-Code: result.next()=false")
                             .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
                             .setColor(Color.RED)
                             .setFooter("Developed by DeinAlbtraum#6224")
                             .build()).queue();
-
-                    try {
-                        result.close();
-                    } catch (SQLException e) {
-                        System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                        System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                        System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                    }
-
-                    try {
-                        resultSet.close();
-                    } catch (SQLException sqlE) {
-                        System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                        System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                        System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                    }
-
-                    try {
-                        resultBlacklist.close();
-                    } catch (SQLException sqlE) {
-                        System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                        System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                        System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                    }
-
-                    try {
-                        Objects.requireNonNull(createRestrictions).close();
-                    } catch (SQLException e) {
-                        System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                        System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                        System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                    }
-
-                    return;
                 }
                 destination = event.getGuild().getRoleById(result.getString("roleid"));
             } catch (SQLException e) {
@@ -925,6 +928,7 @@ public class CommandListener extends ListenerAdapter {
                         .setColor(Color.RED)
                         .setFooter("Developed by DeinAlbtraum#6224")
                         .build()).queue();
+                e.printStackTrace();
 
                 try {
                     result.close();
@@ -963,7 +967,7 @@ public class CommandListener extends ListenerAdapter {
 
             try {
                 boolean isAllowed = false;
-                if (!createRestrictions.isClosed()) {
+                if (!createRestrictions.isClosed() && createRestrictions.next()) {
                     do {
                         if (Objects.requireNonNull(event.getMessage().getMember()).getRoles().contains(event.getGuild().getRoleById(createRestrictions.getString("roleid")))) {
                             isAllowed = true;
@@ -1026,6 +1030,7 @@ public class CommandListener extends ListenerAdapter {
                         .setColor(Color.RED)
                         .setFooter("Developed by DeinAlbtraum#6224")
                         .build()).queue();
+                e.printStackTrace();
 
                 try {
                     result.close();
@@ -1072,7 +1077,7 @@ public class CommandListener extends ListenerAdapter {
                     ArrayList<String> blacklistedWords = new ArrayList<>();
                     boolean nameContainsBlacklisted = false;
 
-                    if (!resultBlacklist.isClosed()) {
+                    if (!resultBlacklist.isClosed() && resultBlacklist.next()) {
                         do {
                             blacklistedWords.add(resultBlacklist.getString("word"));
                         } while (resultBlacklist.next());
@@ -1137,8 +1142,8 @@ public class CommandListener extends ListenerAdapter {
                                 .setFooter("Developed by DeinAlbtraum#6224")
                                 .build()).queue();
 
-                        if (resultSet.getInt("state") == 1) {
-                            SQLHandler.onUpdate("INSERT OR IGNORE INTO _" + event.getGuild().getId() + "(roleid) VALUES(" + role.getIdLong() + ")");
+                        if (resultSet.next() && resultSet.getInt("state") == 1) {
+                            SQLHandler.onUpdate("INSERT IGNORE INTO _" + event.getGuild().getId() + "(roleid) VALUES(" + role.getIdLong() + ")");
                         }
 
                     } else {
@@ -1240,8 +1245,8 @@ public class CommandListener extends ListenerAdapter {
                                     .setFooter("Developed by DeinAlbtraum#6224")
                                     .build()).queue();
 
-                            if (resultSet.getInt("state") == 1) {
-                                SQLHandler.onUpdate("INSERT OR IGNORE INTO _" + event.getGuild().getId() + "(roleid) VALUES(" + role.getIdLong() + ")");
+                            if (resultSet.next() && resultSet.getInt("state") == 1) {
+                                SQLHandler.onUpdate("INSERT IGNORE INTO _" + event.getGuild().getId() + "(roleid) VALUES(" + role.getIdLong() + ")");
                             }
 
                         } else {
@@ -1357,11 +1362,13 @@ public class CommandListener extends ListenerAdapter {
                 if (s.endsWith(",")) {
                     s = s.substring(0, s.length() - 1);
                 }
-                SQLHandler.onUpdate("INSERT OR IGNORE INTO wordRestrictions_" + event.getGuild().getIdLong() + "(word) VALUES('" + s.toLowerCase() + "')");
-                builder.append(s).append("\n");
+                if (s.length() <= 20) {
+                    SQLHandler.onUpdate("INSERT IGNORE INTO wordRestrictions_" + event.getGuild().getIdLong() + "(word) VALUES('" + s.toLowerCase() + "')");
+                    builder.append(s).append("\n");
+                }
             }
             event.getChannel().sendMessage(new EmbedBuilder()
-                    .setTitle("Success").setDescription("Blacklisted these words: \n" + builder.toString())
+                    .setTitle("Success").setDescription("Status: \n " + builder.toString())
                     .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
                     .setColor(Color.GREEN)
                     .setFooter("Developed by DeinAlbtraum#6224")
@@ -1440,12 +1447,12 @@ public class CommandListener extends ListenerAdapter {
         if (Objects.requireNonNull(event.getMessage().getMember()).hasPermission(Permission.MANAGE_ROLES)) {
             StringBuilder builder = new StringBuilder();
             if (!event.getMessage().getMentionedRoles().isEmpty()) {
-                SQLHandler.onUpdate("INSERT OR IGNORE INTO  createRestrictions_" + event.getGuild().getIdLong() + "(roleid) VALUES(" + event.getMessage().getMentionedRoles().get(0).getIdLong() + ")");
+                SQLHandler.onUpdate("INSERT IGNORE INTO  createRestrictions_" + event.getGuild().getIdLong() + "(roleid) VALUES(" + event.getMessage().getMentionedRoles().get(0).getIdLong() + ")");
                 builder.append(event.getMessage().getMentionedRoles().get(0).getName());
 
                 if (event.getMessage().getMentionedRoles().size() > 1) {
                     for (int x = 1; x < event.getMessage().getMentionedRoles().size(); x++) {
-                        SQLHandler.onUpdate("INSERT OR IGNORE INTO createRestrictions_" + event.getGuild().getId() + "(roleid) VALUES(" + event.getMessage().getMentionedRoles().get(x).getIdLong() + ")");
+                        SQLHandler.onUpdate("INSERT IGNORE INTO createRestrictions_" + event.getGuild().getId() + "(roleid) VALUES(" + event.getMessage().getMentionedRoles().get(x).getIdLong() + ")");
                         builder.append("\n ").append(event.getMessage().getMentionedRoles().get(x).getName());
                     }
                 }
@@ -1564,6 +1571,33 @@ public class CommandListener extends ListenerAdapter {
         }
     }
 
+    private void setup (MessageReceivedEvent event) {
+        if (Objects.requireNonNull(event.getMember()).isOwner()) {
+            SQLHandler.onUpdate("CREATE TABLE IF NOT EXISTS _" + event.getGuild().getIdLong() + "(id BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, roleid BIGINT UNSIGNED UNIQUE)");
+            SQLHandler.onUpdate("CREATE TABLE IF NOT EXISTS wordRestrictions_" + event.getGuild().getIdLong() + "(id BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, word VARCHAR(20) UNIQUE)");
+            SQLHandler.onUpdate("CREATE TABLE IF NOT EXISTS createRestrictions_" + event.getGuild().getIdLong() + "(id BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, roleid BIGINT UNIQUE)");
+            SQLHandler.onUpdate("INSERT IGNORE INTO customPrefix(guildid) VALUES(" + event.getGuild().getIdLong() + ")");
+            SQLHandler.onUpdate("INSERT IGNORE INTO colorRolePosition(guildid) VALUES(" + event.getGuild().getIdLong() + ")");
+            SQLHandler.onUpdate("INSERT IGNORE INTO autoWhitelist(guildid) VALUES(" + event.getGuild().getIdLong() + ")");
+            SQLHandler.onUpdate("INSERT IGNORE INTO assignAmount(guildid) VALUES(" + event.getGuild().getIdLong() + ")");
+
+            event.getChannel().sendMessage(new EmbedBuilder()
+                    .setTitle("Success").setDescription("Bot is now Setup for use!")
+                    .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
+                    .setColor(Color.GREEN)
+                    .setFooter("Developed by DeinAlbtraum#6224")
+                    .build()).queue();
+        } else {
+            event.getChannel().sendMessage(new EmbedBuilder()
+                    .setTitle("Permission not found")
+                    .setDescription("You don't have the Permission to setup the bot! The Permission needed is: `Permission.OWNER`")
+                    .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
+                    .setColor(Color.RED)
+                    .setFooter("Developed by DeinAlbtraum#6224")
+                    .build()).queue();
+        }
+    }
+
     private void easter(MessageReceivedEvent event) {
         event.getChannel().sendMessage("May i offer you a nice egg in this trying-time? :egg:").queue();
     }
@@ -1585,7 +1619,7 @@ public class CommandListener extends ListenerAdapter {
                 event.getChannel().sendMessage(new EmbedBuilder()
                         .setTitle("Help")
                         .addField("Usage", "<prefix> set-prefix <new prefix>", false)
-                        .addField("Description", "The set-prefix command is used to set the third prefix the bot responds to.\n To perform this command the user needs the Permission `Permission.MANAGE_SERVER`.", false)
+                        .addField("Description", "The set-prefix command is used to set the third prefix the bot responds to. Prefixes can´t be longer than 20 characters.\n To perform this command the user needs the Permission `Permission.MANAGE_SERVER`.", false)
                         .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
                         .setColor(ColorBot.orange)
                         .setFooter("Developed by DeinAlbtraum#6224")
@@ -1689,7 +1723,7 @@ public class CommandListener extends ListenerAdapter {
                 event.getChannel().sendMessage(new EmbedBuilder()
                         .setTitle("Help")
                         .addField("Usage", "<prefix> blacklist-words <(multiple) words to blacklist here>", false)
-                        .addField("Description", "The blacklist-words command is used to add words to the blacklist. The words are not case-sensitive.\n To perform this command the user needs the Permission `Permission.MANAGE_ROLES`. In addition, users with the Permission `Permission.MANAGE_ROLES` override the blacklist. \nWords in the blacklist can **NOT** be used in the create command.", false)
+                        .addField("Description", "The blacklist-words command is used to add words to the blacklist. The words are not case-sensitive. Words can´t be longer than 20 characters.\n To perform this command the user needs the Permission `Permission.MANAGE_ROLES`. In addition, users with the Permission `Permission.MANAGE_ROLES` override the blacklist. \nWords in the blacklist can **NOT** be used in the create command.", false)
                         .addField("See also", "create \n whitelist-words", false)
                         .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
                         .setColor(ColorBot.orange)
@@ -1762,6 +1796,16 @@ public class CommandListener extends ListenerAdapter {
                         .setFooter("Developed by DeinAlbtraum#6224")
                         .build()).queue();
                 break;
+            case "setup":
+                event.getChannel().sendMessage(new EmbedBuilder()
+                        .setTitle("Help")
+                        .addField("Usage", "<prefix> setup", false)
+                        .addField("Description", "This Command is used to setup the Database of the Bot. You only need to run this, if the Bot joined your server while being offline!\n To perform this command the user needs the Permission `Permission.OWNER`.", false)
+                        .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
+                        .setColor(ColorBot.orange)
+                        .setFooter("Developed by DeinAlbtraum#6224")
+                        .build()).queue();
+                break;
             case "help":
                 event.getChannel().sendMessage(new EmbedBuilder()
                         .setTitle("Help")
@@ -1772,17 +1816,18 @@ public class CommandListener extends ListenerAdapter {
                         .setFooter("Developed by DeinAlbtraum#6224")
                         .build()).queue();
                 break;
+
             default:
                 try {
                     ResultSet result = SQLHandler.onQuery("SELECT prefix from customPrefix WHERE guildid=" + event.getGuild().getId());
 
-                    if (result != null && !result.isClosed()) {
+                    if (result != null && !result.isClosed() && result.next()) {
 
                         String customPrefix = result.getString("prefix");
 
                         event.getChannel().sendMessage(new EmbedBuilder()
                                 .setTitle("Help")
-                                .setDescription("Default Prefixes (these work on every server the bot is on): `!color`, `!c` \n Prefix on this server: `" + customPrefix + "`\n \n \n \n These commands exist. Write <prefix> help <command> to get more information on how to use the command.\n \n **General** \n create \n assign \n remove \n assignable \n words-blacklisted \n help \n \n **Special** \n whitelist \n blacklist \n whitelist-words \n blacklist-words \n remote-delete \n transparent-all \n create-whitelist \n create-blacklist \n can-create \n \n **Settings** \n set-prefix \n set-role-position \n auto-whitelist \n role-amount")
+                                .setDescription("Default Prefix (this works on every server the bot is on): `!color` \n Prefix on this server: `" + customPrefix + "`\n \n \n \n These commands exist. Write <prefix> help <command> to get more information on how to use the command.\n \n **General** \n create \n assign \n remove \n assignable \n words-blacklisted \n help \n \n **Special** \n whitelist \n blacklist \n whitelist-words \n blacklist-words \n remote-delete \n transparent-all \n create-whitelist \n create-blacklist \n can-create \n \n **Settings** \n set-prefix \n set-role-position \n auto-whitelist \n role-amount \n setup")
                                 .addField("", "Join my [Support-Server](https://discordapp.com/invite/c56xQW6)\n[Add](https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot) me to your server", false)
                                 .setColor(ColorBot.orange)
                                 .setFooter("Developed by DeinAlbtraum#6224")
@@ -1807,6 +1852,7 @@ public class CommandListener extends ListenerAdapter {
                             .setColor(Color.RED)
                             .setFooter("Developed by DeinAlbtraum#6224")
                             .build()).queue();
+                    e.printStackTrace();
                 }
                 break;
         }
@@ -1836,7 +1882,7 @@ public class CommandListener extends ListenerAdapter {
                     roles.add(event.getGuild().getRoleById(result.getString("roleid")));
                 } while (result.next());
             }
-            if (limitSet != null && !limitSet.isClosed()) {
+            if (limitSet != null && !limitSet.isClosed() && limitSet.next()) {
                 limit = limitSet.getLong("amount");
             }
 

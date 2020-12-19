@@ -57,18 +57,18 @@ public class OnReadyListener extends ListenerAdapter {
 
                 for (Guild g : event.getJDA().getGuilds()) {
 
-                    SQLHandler.onUpdate("CREATE TABLE IF NOT EXISTS _" + g.getIdLong() + "(id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT, roleid BIGINT UNIQUE)");
-                    SQLHandler.onUpdate("CREATE TABLE IF NOT EXISTS wordRestrictions_" + g.getIdLong() + "(id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT, word VARCHAR(2001) UNIQUE)");
-                    SQLHandler.onUpdate("CREATE TABLE IF NOT EXISTS createRestrictions_" + g.getIdLong() + "(id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT, roleid BIGINT UNIQUE)");
-                    SQLHandler.onUpdate("INSERT OR IGNORE INTO customPrefix(guildid) VALUES(" + g.getIdLong() + ")");
-                    SQLHandler.onUpdate("INSERT OR IGNORE INTO colorRolePosition(guildid) VALUES(" + g.getIdLong() + ")");
-                    SQLHandler.onUpdate("INSERT OR IGNORE INTO autoWhitelist(guildid) VALUES(" + g.getIdLong() + ")");
-                    SQLHandler.onUpdate("INSERT OR IGNORE INTO assignAmount(guildid) VALUES(" + g.getIdLong() + ")");
+                    SQLHandler.onUpdate("CREATE TABLE IF NOT EXISTS _" + g.getIdLong() + "(id BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, roleid BIGINT UNSIGNED UNIQUE)");
+                    SQLHandler.onUpdate("CREATE TABLE IF NOT EXISTS wordRestrictions_" + g.getIdLong() + "(id BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, word VARCHAR(25) UNIQUE)");
+                    SQLHandler.onUpdate("CREATE TABLE IF NOT EXISTS createRestrictions_" + g.getIdLong() + "(id BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT, roleid BIGINT UNSIGNED UNIQUE)");
+                    SQLHandler.onUpdate("INSERT IGNORE INTO customPrefix(guildid) VALUES(" + g.getIdLong() + ")");
+                    SQLHandler.onUpdate("INSERT IGNORE INTO colorRolePosition(guildid) VALUES(" + g.getIdLong() + ")");
+                    SQLHandler.onUpdate("INSERT IGNORE INTO autoWhitelist(guildid) VALUES(" + g.getIdLong() + ")");
+                    SQLHandler.onUpdate("INSERT IGNORE INTO assignAmount(guildid) VALUES(" + g.getIdLong() + ")");
 
                     ResultSet result = SQLHandler.onQuery("SELECT roleid FROM _" + g.getIdLong());
 
                     try {
-                        if (result != null && !result.isClosed()) {
+                        if (result != null && !result.isClosed() && result.next()) {
                             try {
                                 do {
                                     String roleId = Objects.requireNonNull(result).getString("roleid");
@@ -91,7 +91,7 @@ public class OnReadyListener extends ListenerAdapter {
                     ResultSet resultSet = SQLHandler.onQuery("SELECT roleid FROM colorRolePosition WHERE guildid=" + g.getIdLong());
 
                     try {
-                        if (resultSet != null && !resultSet.isClosed()) {
+                        if (resultSet != null && !resultSet.isClosed() && resultSet.next()) {
                             try {
                                 do {
                                     String roleId = Objects.requireNonNull(resultSet).getString("roleid");
@@ -117,7 +117,7 @@ public class OnReadyListener extends ListenerAdapter {
                     ResultSet createRestrictions = SQLHandler.onQuery("SELECT roleid FROM _" + g.getIdLong());
 
                     try {
-                        if (createRestrictions != null && !createRestrictions.isClosed()) {
+                        if (createRestrictions != null && !createRestrictions.isClosed() && createRestrictions.next()) {
                             try {
                                 do {
                                     String roleId = Objects.requireNonNull(createRestrictions).getString("roleid");
