@@ -18,6 +18,7 @@ public class OnGuildLeaveListener extends ListenerAdapter {
             SQLHandler.onUpdate("DELETE FROM colorRolePosition WHERE guildid=" + event.getGuild().getIdLong());
             SQLHandler.onUpdate("DELETE FROM autoWhitelist WHERE guildid=" + event.getGuild().getIdLong());
             SQLHandler.onUpdate("DELETE FROM assignAmount WHERE guildid=" + event.getGuild().getIdLong());
+            SQLHandler.onUpdate("DELETE FROM guilds WHERE guildid=" + event.getGuild().getIdLong());
         }
     }
 }

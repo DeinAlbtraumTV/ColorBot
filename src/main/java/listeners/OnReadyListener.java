@@ -64,6 +64,7 @@ public class OnReadyListener extends ListenerAdapter {
                     SQLHandler.onUpdate("INSERT IGNORE INTO colorRolePosition(guildid) VALUES(" + g.getIdLong() + ")");
                     SQLHandler.onUpdate("INSERT IGNORE INTO autoWhitelist(guildid) VALUES(" + g.getIdLong() + ")");
                     SQLHandler.onUpdate("INSERT IGNORE INTO assignAmount(guildid) VALUES(" + g.getIdLong() + ")");
+                    SQLHandler.onUpdate("INSERT IGNORE INTO guilds(guildid) VALUES(" + g.getIdLong() + ")");
 
                     ResultSet result = SQLHandler.onQuery("SELECT roleid FROM _" + g.getIdLong());
 
