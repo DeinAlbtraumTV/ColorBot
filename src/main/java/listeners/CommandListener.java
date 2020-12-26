@@ -8,6 +8,8 @@ import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
@@ -17,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class CommandListener extends ListenerAdapter {
+
+    private final static Logger logger = LoggerFactory.getLogger(CommandListener.class);
 
     @Override
     public void onMessageReceived(@Nonnull MessageReceivedEvent event) {
@@ -89,19 +93,14 @@ public class CommandListener extends ListenerAdapter {
                         }
                     }
                 } catch (SQLException e) {
-                        System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                        System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to retrieve custom prefix from database");
-                        System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                        e.printStackTrace();
+                        logger.error("An error occurred while trying to retrieve custom prefix from database", e);
                         return;
                 }
                 try {
                     assert result != null;
                     result.close();
                 } catch (SQLException e) {
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                    System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                    logger.error("An error occurred while trying to close a resultSet", e);
                 }
             } else {
                 event.getChannel().sendMessage("This Bot is not intended to be used in private Channels!").queue();
@@ -272,9 +271,7 @@ public class CommandListener extends ListenerAdapter {
                     try {
                         result.close();
                     } catch (SQLException e) {
-                        System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                        System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                        System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                        logger.error("An error occurred while trying to close a resultSet", e);
                     }
                 }
 
@@ -293,7 +290,7 @@ public class CommandListener extends ListenerAdapter {
                     .setFooter("Developed by DeinAlbtraum#6224")
                     .build()).queue();
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Encountered an error while retrieving all assignable roles", e);
             event.getChannel().sendMessage(new EmbedBuilder()
                     .setTitle("Error")
                     .setDescription("An Error occurred while trying to get all roles that are assignable on this server.\n \nPlease try again later.\nIf this error persists please make a bug report in my support-server!")
@@ -307,7 +304,7 @@ public class CommandListener extends ListenerAdapter {
                 result.close();
             }
         } catch (SQLException e) {
-            System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying close to a resultSet");
+            logger.error("An error occurred while trying close to a resultSet", e);
         }
     }
 
@@ -499,7 +496,7 @@ public class CommandListener extends ListenerAdapter {
                         } while (result.next());
                     }
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    logger.error("Encountered an unknown error while whitelisting roles", e);
                     event.getChannel().sendMessage(new EmbedBuilder()
                             .setTitle("Error")
                             .setDescription("An Error occurred while assigning the roles.\n \nPlease try again later.\nIf this error persists please make a bug report in my support-server!")
@@ -511,9 +508,7 @@ public class CommandListener extends ListenerAdapter {
                     try {
                         result.close();
                     } catch (SQLException sqlE) {
-                        System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                        System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                        System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                        logger.error("An error occurred while trying to close a resultSet", sqlE);
                     }
 
                     return;
@@ -551,9 +546,7 @@ public class CommandListener extends ListenerAdapter {
                 try {
                     result.close();
                 } catch (SQLException e) {
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                    System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                    logger.error("An error occurred while trying to close a resultSet", e);
                 }
 
                 return;
@@ -580,9 +573,7 @@ public class CommandListener extends ListenerAdapter {
             try {
                 result.close();
             } catch (SQLException e) {
-                System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                logger.error("An error occurred while trying to close a resultSet", e);
             }
 
         } else {
@@ -616,9 +607,7 @@ public class CommandListener extends ListenerAdapter {
                     try {
                         result.close();
                     } catch (SQLException e) {
-                        System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                        System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                        System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                        logger.error("An error occurred while trying to close a resultSet", e);
                     }
                 }
 
@@ -629,7 +618,7 @@ public class CommandListener extends ListenerAdapter {
                 } while (result.next());
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Encountered an error while removing roles", e);
             event.getChannel().sendMessage(new EmbedBuilder()
                     .setTitle("Error")
                     .setDescription("An Error occurred while removing the roles.\n \nPlease try again later.\nIf this error persists please make a bug report in my support-server!")
@@ -641,9 +630,7 @@ public class CommandListener extends ListenerAdapter {
             try {
                 Objects.requireNonNull(result).close();
             } catch (SQLException sqlE) {
-                System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying close to a resultSet");
-                System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                logger.error("An error occurred while trying close to a resultSet", sqlE);
             }
 
             return;
@@ -674,9 +661,7 @@ public class CommandListener extends ListenerAdapter {
             try {
                 result.close();
             } catch (SQLException e) {
-                System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                logger.error("An error occurred while trying to close a resultSet", e);
             }
 
             return;
@@ -704,9 +689,7 @@ public class CommandListener extends ListenerAdapter {
         try {
             result.close();
         } catch (SQLException e) {
-            System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-            System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-            System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+            logger.error("An error occurred while trying to close a resultSet", e);
         }
     }
 
@@ -733,25 +716,19 @@ public class CommandListener extends ListenerAdapter {
                 try {
                     Objects.requireNonNull(resultSet).close();
                 } catch (SQLException e) {
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                    System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                    logger.error("An error occurred while trying to close a resultSet", e);
                 }
 
                 try {
                     Objects.requireNonNull(resultBlacklist).close();
                 } catch (SQLException e) {
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                    System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                    logger.error("An error occurred while trying to close a resultSet", e);
                 }
 
                 try {
                     Objects.requireNonNull(createRestrictions).close();
                 } catch (SQLException e) {
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                    System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                    logger.error("An error occurred while trying to close a resultSet", e);
                 }
 
                 return;
@@ -769,25 +746,19 @@ public class CommandListener extends ListenerAdapter {
                 try {
                     result.close();
                 } catch (SQLException e) {
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                    System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                    logger.error("An error occurred while trying to close a resultSet", e);
                 }
 
                 try {
                     Objects.requireNonNull(resultBlacklist).close();
                 } catch (SQLException e) {
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                    System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                    logger.error("An error occurred while trying to close a resultSet", e);
                 }
 
                 try {
                     Objects.requireNonNull(createRestrictions).close();
                 } catch (SQLException e) {
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                    System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                    logger.error("An error occurred while trying to close a resultSet", e);
                 }
 
                 return;
@@ -805,25 +776,19 @@ public class CommandListener extends ListenerAdapter {
                 try {
                     result.close();
                 } catch (SQLException e) {
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                    System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                    logger.error("An error occurred while trying to close a resultSet", e);
                 }
 
                 try {
                     Objects.requireNonNull(resultSet).close();
                 } catch (SQLException e) {
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                    System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                    logger.error("An error occurred while trying to close a resultSet", e);
                 }
 
                 try {
                     Objects.requireNonNull(createRestrictions).close();
                 } catch (SQLException e) {
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                    System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                    logger.error("An error occurred while trying to close a resultSet", e);
                 }
 
                 return;
@@ -841,25 +806,19 @@ public class CommandListener extends ListenerAdapter {
                 try {
                     result.close();
                 } catch (SQLException e) {
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                    System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                    logger.error("An error occurred while trying to close a resultSet", e);
                 }
 
                 try {
                     resultSet.close();
                 } catch (SQLException e) {
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                    System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                    logger.error("An error occurred while trying to close a resultSet", e);
                 }
 
                 try {
                     Objects.requireNonNull(resultBlacklist).close();
                 } catch (SQLException e) {
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                    System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                    logger.error("An error occurred while trying to close a resultSet", e);
                 }
 
                 return;
@@ -879,33 +838,25 @@ public class CommandListener extends ListenerAdapter {
                         try {
                             result.close();
                         } catch (SQLException e) {
-                            System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                            System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                            System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                            logger.error("An error occurred while trying to close a resultSet", e);
                         }
 
                         try {
                             resultSet.close();
-                        } catch (SQLException sqlE) {
-                            System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                            System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                            System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                        } catch (SQLException e) {
+                            logger.error("An error occurred while trying to close a resultSet", e);
                         }
 
                         try {
                             resultBlacklist.close();
-                        } catch (SQLException sqlE) {
-                            System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                            System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                            System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                        } catch (SQLException e) {
+                            logger.error("An error occurred while trying to close a resultSet", e);
                         }
 
                         try {
                             Objects.requireNonNull(createRestrictions).close();
                         } catch (SQLException e) {
-                            System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                            System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                            System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                            logger.error("An error occurred while trying to close a resultSet", e);
                         }
 
                         return;
@@ -928,40 +879,31 @@ public class CommandListener extends ListenerAdapter {
                         .setColor(Color.RED)
                         .setFooter("Developed by DeinAlbtraum#6224")
                         .build()).queue();
-                e.printStackTrace();
+                logger.error("Encountered an error while creating a role", e);
 
                 try {
                     result.close();
                 } catch (SQLException sqlE) {
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                    System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                    logger.error("An error occurred while trying to close a resultSet", sqlE);
                 }
 
                 try {
                     resultSet.close();
                 } catch (SQLException sqlE) {
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                    System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                    logger.error("An error occurred while trying to close a resultSet", sqlE);
                 }
 
                 try {
                     resultBlacklist.close();
                 } catch (SQLException sqlE) {
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                    System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                    logger.error("An error occurred while trying to close a resultSet", sqlE);
                 }
 
                 try {
                     Objects.requireNonNull(createRestrictions).close();
                 } catch (SQLException sqlE) {
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                    System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                    logger.error("An error occurred while trying to close a resultSet", sqlE);
                 }
-
                 return;
             }
 
@@ -991,33 +933,25 @@ public class CommandListener extends ListenerAdapter {
                     try {
                         result.close();
                     } catch (SQLException sqlE) {
-                        System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                        System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                        System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                        logger.error("An error occurred while trying to close a resultSet", sqlE);
                     }
 
                     try {
                         resultSet.close();
                     } catch (SQLException sqlE) {
-                        System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                        System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                        System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                        logger.error("An error occurred while trying to close a resultSet", sqlE);
                     }
 
                     try {
                         resultBlacklist.close();
                     } catch (SQLException sqlE) {
-                        System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                        System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                        System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                        logger.error("An error occurred while trying to close a resultSet", sqlE);
                     }
 
                     try {
                         Objects.requireNonNull(createRestrictions).close();
                     } catch (SQLException sqlE) {
-                        System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                        System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                        System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                        logger.error("An error occurred while trying to close a resultSet", sqlE);
                     }
 
                     return;
@@ -1030,38 +964,30 @@ public class CommandListener extends ListenerAdapter {
                         .setColor(Color.RED)
                         .setFooter("Developed by DeinAlbtraum#6224")
                         .build()).queue();
-                e.printStackTrace();
+                logger.error("Encountered an error while creating a role", e);
 
                 try {
                     result.close();
                 } catch (SQLException sqlE) {
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                    System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                    logger.error("An error occurred while trying to close a resultSet", sqlE);
                 }
 
                 try {
                     resultSet.close();
                 } catch (SQLException sqlE) {
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                    System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                    logger.error("An error occurred while trying to close a resultSet", sqlE);
                 }
 
                 try {
                     resultBlacklist.close();
                 } catch (SQLException sqlE) {
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                    System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                    logger.error("An error occurred while trying to close a resultSet", sqlE);
                 }
 
                 try {
                     Objects.requireNonNull(createRestrictions).close();
                 } catch (SQLException sqlE) {
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                    System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                    logger.error("An error occurred while trying to close a resultSet", sqlE);
                 }
 
                 return;
@@ -1102,30 +1028,22 @@ public class CommandListener extends ListenerAdapter {
                         try {
                             result.close();
                         } catch (SQLException e) {
-                            System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                            System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                            System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                            logger.error("An error occurred while trying to close a resultSet", e);
                         }
                         try {
                             resultSet.close();
                         } catch (SQLException e) {
-                            System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                            System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                            System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                            logger.error("An error occurred while trying to close a resultSet", e);
                         }
                         try {
                             resultBlacklist.close();
                         } catch (SQLException e) {
-                            System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                            System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                            System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                            logger.error("An error occurred while trying to close a resultSet", e);
                         }
                         try {
                             Objects.requireNonNull(createRestrictions).close();
                         } catch (SQLException e) {
-                            System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                            System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                            System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                            logger.error("An error occurred while trying to close a resultSet", e);
                         }
                         return;
                     }
@@ -1164,6 +1082,7 @@ public class CommandListener extends ListenerAdapter {
                             .setColor(Color.RED)
                             .setFooter("Developed by DeinAlbtraum#6224")
                             .build()).queue();
+                    logger.error("Encountered an error while whitelisting a role after creation", sqlE);
                 } catch (Exception e) {
                     event.getChannel().sendMessage(new EmbedBuilder()
                             .setTitle("Error")
@@ -1205,30 +1124,22 @@ public class CommandListener extends ListenerAdapter {
                             try {
                                 result.close();
                             } catch (SQLException e) {
-                                System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                                System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                                System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                                logger.error("An error occurred while trying to close a resultSet", e);
                             }
                             try {
                                 resultSet.close();
                             } catch (SQLException e) {
-                                System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                                System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                                System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                                logger.error("An error occurred while trying to close a resultSet", e);
                             }
                             try {
                                 resultBlacklist.close();
                             } catch (SQLException e) {
-                                System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                                System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                                System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                                logger.error("An error occurred while trying to close a resultSet", e);
                             }
                             try {
                                 Objects.requireNonNull(createRestrictions).close();
                             } catch (SQLException e) {
-                                System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                                System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                                System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                                logger.error("An error occurred while trying to close a resultSet", e);
                             }
                             return;
                         }
@@ -1275,6 +1186,7 @@ public class CommandListener extends ListenerAdapter {
                             .setColor(Color.RED)
                             .setFooter("Developed by DeinAlbtraum#6224")
                             .build()).queue();
+                    logger.error("Encountered an error while whitelisting a role after creation", sqlE);
                 } catch (Exception e) {
                     event.getChannel().sendMessage(new EmbedBuilder()
                             .setTitle("Error")
@@ -1288,30 +1200,22 @@ public class CommandListener extends ListenerAdapter {
             try {
                 result.close();
             } catch (SQLException e) {
-                System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                logger.error("An error occurred while trying to close a resultSet", e);
             }
             try {
                 resultSet.close();
             } catch (SQLException e) {
-                System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                logger.error("An error occurred while trying to close a resultSet", e);
             }
             try {
                 resultBlacklist.close();
             } catch (SQLException e) {
-                System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                logger.error("An error occurred while trying to close a resultSet", e);
             }
             try {
                 Objects.requireNonNull(createRestrictions).close();
             } catch (SQLException e) {
-                System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                logger.error("An error occurred while trying to close a resultSet", e);
             }
         } else {
             event.getChannel().sendMessage(new EmbedBuilder()
@@ -1402,9 +1306,7 @@ public class CommandListener extends ListenerAdapter {
                     try {
                         result.close();
                     } catch (SQLException e) {
-                        System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                        System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                        System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                        logger.error("An error occurred while trying to close a resultSet", e);
                     }
                 }
 
@@ -1423,7 +1325,7 @@ public class CommandListener extends ListenerAdapter {
                     .setFooter("Developed by DeinAlbtraum#6224")
                     .build()).queue();
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Encountered an error while retrieving blacklisted words", e);
             event.getChannel().sendMessage(new EmbedBuilder()
                     .setTitle("Error")
                     .setDescription("An Error occurred while trying to get the blacklisted words on this server.\n \nPlease try again later.\nIf this error persists please make a bug report in my support-server!")
@@ -1437,9 +1339,7 @@ public class CommandListener extends ListenerAdapter {
                 result.close();
             }
         } catch (SQLException e) {
-            System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-            System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying close to a resultSet");
-            System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+            logger.error("An error occurred while trying to close a resultSet", e);
         }
     }
 
@@ -1530,9 +1430,7 @@ public class CommandListener extends ListenerAdapter {
                     try {
                         result.close();
                     } catch (SQLException e) {
-                        System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                        System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                        System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                        logger.error("An error occurred while trying to close a resultSet", e);
                     }
                 }
 
@@ -1551,7 +1449,7 @@ public class CommandListener extends ListenerAdapter {
                     .setFooter("Developed by DeinAlbtraum#6224")
                     .build()).queue();
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Encountered an error while retrieving all roles that can use create", e);
             event.getChannel().sendMessage(new EmbedBuilder()
                     .setTitle("Error")
                     .setDescription("An Error occurred while trying to get all roles that can use the create command on this server.\n \nPlease try again later.\nIf this error persists please make a bug report in my support-server!")
@@ -1565,9 +1463,7 @@ public class CommandListener extends ListenerAdapter {
                 result.close();
             }
         } catch (SQLException e) {
-            System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-            System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying close to a resultSet");
-            System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+            logger.error("An error occurred while trying to close a resultSet", e);
         }
     }
 
@@ -1852,7 +1748,7 @@ public class CommandListener extends ListenerAdapter {
                             .setColor(Color.RED)
                             .setFooter("Developed by DeinAlbtraum#6224")
                             .build()).queue();
-                    e.printStackTrace();
+                    logger.error("Encountered an error while retrieving a custom prefix", e);
                 }
                 break;
         }
@@ -1872,9 +1768,7 @@ public class CommandListener extends ListenerAdapter {
                     result.close();
                     Objects.requireNonNull(limitSet).close();
                 } catch (SQLException e) {
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                    System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to close a resultSet");
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                    logger.error("An error occurred while trying to close a resultSet", e);
                 }
 
             } else {
@@ -1887,7 +1781,7 @@ public class CommandListener extends ListenerAdapter {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Encountered an error while retrieving roleAmount", e);
         }
 
         try {
@@ -1895,9 +1789,7 @@ public class CommandListener extends ListenerAdapter {
                 result.close();
             }
         } catch (SQLException e) {
-            System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-            System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying close to a resultSet");
-            System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+            logger.error("An error occurred while trying to close a resultSet", e);
         }
 
         for (Role r : Objects.requireNonNull(event.getMessage().getMember()).getRoles()) {
@@ -1913,9 +1805,7 @@ public class CommandListener extends ListenerAdapter {
             try {
                 Objects.requireNonNull(limitSet).close();
             } catch (SQLException e) {
-                System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying close to a resultSet");
-                System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                logger.error("An error occurred while trying to close a resultSet", e);
             }
 
             return true;
@@ -1925,9 +1815,7 @@ public class CommandListener extends ListenerAdapter {
             try {
                 Objects.requireNonNull(limitSet).close();
             } catch (SQLException e) {
-                System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying close to a resultSet");
-                System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                logger.error("An error occurred while trying to close a resultSet", e);
             }
 
             return true;
@@ -1937,9 +1825,7 @@ public class CommandListener extends ListenerAdapter {
             try {
                 Objects.requireNonNull(limitSet).close();
             } catch (SQLException e) {
-                System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying close to a resultSet");
-                System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                logger.error("An error occurred while trying to close a resultSet", e);
             }
 
             return true;
@@ -1948,9 +1834,7 @@ public class CommandListener extends ListenerAdapter {
         try {
             limitSet.close();
         } catch (SQLException e) {
-            System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-            System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying close to a resultSet");
-            System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+            logger.error("An error occurred while trying to close a resultSet", e);
         }
 
         return false;

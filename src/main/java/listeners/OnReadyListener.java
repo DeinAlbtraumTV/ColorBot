@@ -1,4 +1,5 @@
 package listeners;
+
 import database.SQLHandler;
 import main.ColorBot;
 import net.dv8tion.jda.api.JDA;
@@ -6,6 +7,8 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,6 +21,8 @@ import java.util.TimerTask;
 
 
 public class OnReadyListener extends ListenerAdapter {
+
+    private final static Logger logger = LoggerFactory.getLogger(OnReadyListener.class);
 
     public static Timer timer = new Timer();
     public static Timer databaseTimer = new Timer();
@@ -48,8 +53,7 @@ public class OnReadyListener extends ListenerAdapter {
                     ColorBot.servers = 0L;
                 }
 
-                System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                System.out.println("[ColorBot ColorBot-Thread] Info - Starting Database Repair");
+                logger.info("Starting Database Repair");
 
                 Instant start = Instant.now();
 
@@ -81,13 +85,11 @@ public class OnReadyListener extends ListenerAdapter {
                                     }
                                 } while (result.next());
                             } catch (SQLException e) {
-                                System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while checking for invalid database entries:");
-                                e.printStackTrace();
+                                logger.error("An error occurred while checking for invalid database entries", e);
                             }
                         }
                     } catch (SQLException e) {
-                        System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while checking for invalid database entries:");
-                        e.printStackTrace();
+                        logger.error("An error occurred while checking for invalid database entries", e);
                     }
                     ResultSet resultSet = SQLHandler.onQuery("SELECT roleid FROM colorRolePosition WHERE guildid=" + g.getIdLong());
 
@@ -106,13 +108,11 @@ public class OnReadyListener extends ListenerAdapter {
                                     }
                                 } while (resultSet.next());
                             } catch (SQLException e) {
-                                System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while checking for invalid database entries:");
-                                e.printStackTrace();
+                                logger.error("An error occurred while checking for invalid database entries", e);
                             }
                         }
                     } catch (SQLException e) {
-                        System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while checking for invalid database entries:");
-                        e.printStackTrace();
+                        logger.error("An error occurred while checking for invalid database entries", e);
                     }
 
                     ResultSet createRestrictions = SQLHandler.onQuery("SELECT roleid FROM _" + g.getIdLong());
@@ -130,13 +130,11 @@ public class OnReadyListener extends ListenerAdapter {
                                     }
                                 } while (createRestrictions.next());
                             } catch (SQLException e) {
-                                System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while checking for invalid database entries:");
-                                e.printStackTrace();
+                                logger.error("An error occurred while checking for invalid database entries", e);
                             }
                         }
                     } catch (SQLException e) {
-                        System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while checking for invalid database entries:");
-                        e.printStackTrace();
+                        logger.error("An error occurred while checking for invalid database entries", e);
                     }
 
                     try {
@@ -144,51 +142,49 @@ public class OnReadyListener extends ListenerAdapter {
                             result.close();
                         }
                     } catch (SQLException e) {
-                        System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while closing a resultSet");
+                        logger.error("An error occurred while closing a resultSet", e);
                     }
                     try {
                         if (resultSet != null) {
                             resultSet.close();
                         }
                     } catch (SQLException e) {
-                        System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while closing a resultSet");
+                        logger.error("An error occurred while closing a resultSet", e);
                     }
                     try {
                         if (createRestrictions != null) {
                             createRestrictions.close();
                         }
                     } catch (SQLException e) {
-                        System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while closing a resultSet");
+                        logger.error("An error occurred while closing a resultSet", e);
                     }
 
                 }
 
-                System.out.println("[ColorBot ColorBot-Thread] INFO - Found and deleted " + invalidIds + " invalid Role-Ids in Shard: " + event.getJDA().getShardInfo().getShardId());
+                logger.info("Found and deleted {} invalid Role-Ids in Shard: {}", invalidIds, event.getJDA().getShardInfo().getShardId());
 
                 for (Guild g : event.getJDA().getGuilds()) {
                     ColorBot.servers++;
                     ColorBot.members = ColorBot.members + g.getMembers().size();
                 }
 
-                System.out.println("[ColorBot ColorBot-Thread] INFO - So many Servers: " + ColorBot.servers + " and so many Members: " + ColorBot.members + " after Shard: " + event.getJDA().getShardInfo().getShardId() + " loaded");
+                logger.info("So many Servers: {} and so many Members: {} after Shard: {} loaded", ColorBot.servers, ColorBot.members, event.getJDA().getShardInfo().getShardId());
+                logger.info("Database Repair finished at {}. Next one scheduled in 1h",  new Timestamp(System.currentTimeMillis()));
 
-                System.out.println("[ColorBot ColorBot-Thread] Info - Database Repair finished. Next one scheduled in 1h");
-                System.out.println("[ColorBot ColorBot-Thread] Info - Time when finished: " + new Timestamp(System.currentTimeMillis()));
-                System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
 
                 Instant end = Instant.now();
 
                 if (Duration.between(start, end).toMillis() / 1000 > 0) {
                     long duration = Duration.between(start, end).toMillis() / 1000;
 
-                    System.out.println("[ColorBot ColorBot-Thread] Info - The Database Repair took: " + duration + " Seconds");
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                    logger.info("The Database Repair took: {} Seconds", duration);
+
                 }
                 else {
                     long duration = Duration.between(start, end).toMillis();
 
-                    System.out.println("[ColorBot ColorBot-Thread] Info - The Database Repair took: " + duration + " Milliseconds");
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                    logger.info("The Database Repair took: {} Milliseconds", duration);
+
                 }
             }
         };

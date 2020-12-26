@@ -9,6 +9,8 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.security.auth.login.LoginException;
 import java.awt.*;
@@ -18,21 +20,26 @@ import java.io.InputStreamReader;
 
 public class ColorBot {
 
-    public static String version = "0.8.01";
+    public static String version = "0.9.01";
     public static Color orange = new Color(255, 127, 0);
     public static long servers = 0L;
     public static long members = 0L;
     public static boolean shutdown = false;
 
     private static ShardManager ShardManager;
+    private final static Logger logger = LoggerFactory.getLogger(ColorBot.class);
 
     public static void main(String[] args) {
-        new ColorBot(args);
+        try {
+            new ColorBot(args);
+        } catch (Exception e) {
+            logger.error("Unknown exception encountered", e);
+        }
     }
 
     private ColorBot(String[] args) {
 
-        System.out.println("[ColorBot ColorBot-Thread] INFO - Starting initiated");
+        logger.info("Starting initiated");
 
         SQLHandler.connect(true);
         SQLManager.onCreate();
@@ -40,6 +47,7 @@ public class ColorBot {
         DefaultShardManagerBuilder ShardedBuilder;
 
         if (args.length > 0 && args[0].equals("testing")) {
+            logger.warn("Running on testing mode");
             ShardedBuilder = DefaultShardManagerBuilder.create(Tokens.testing, GatewayIntent.GUILD_MESSAGES, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MEMBERS);
         }
         else {
@@ -61,15 +69,15 @@ public class ColorBot {
 
         try {
             ShardManager = ShardedBuilder.build();
-            System.out.println("[ColorBot ColorBot-Thread] INFO - Starting finished");
+            logger.info("Starting finished");
         } catch (LoginException e) {
-            System.out.println("[ColorBot ColorBot-Thread] ERROR - An error occurred while trying to login to discord");
+            logger.error("An error occurred while trying to login to discord", e);
         }
 
         startShutdownThread();
-        System.out.println("[ColorBot ColorBot-Thread] INFO - Shards running: " + ShardManager.getShardsRunning());
-        System.out.println("[ColorBot ColorBot-Thread] INFO - Shards queued: " + ShardManager.getShardsQueued());
-        System.out.println("[ColorBot ColorBot-Thread] INFO - Shards total: " + ShardManager.getShardsTotal());
+        logger.info("Shards running: {}", ShardManager.getShardsRunning());
+        logger.info("Shards queued: {}", ShardManager.getShardsQueued());
+        logger.info("Shards total: {}", ShardManager.getShardsTotal());
     }
 
     private void startShutdownThread() {
@@ -83,8 +91,7 @@ public class ColorBot {
                 while ((input = reader.readLine()) != null) {
                     if (input.equalsIgnoreCase("exit") || input.equalsIgnoreCase("stop")) {
                         if (ShardManager != null) {
-                            System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                            System.out.println("[ColorBot Read-Thread#01 - Shutdown] INFO - Shutdown initiated");
+                            logger.info("Shutdown initiated");
                             shutdown = true;
                             ShardManager.setStatus(OnlineStatus.OFFLINE);
                             ShardManager.shutdown();
@@ -93,21 +100,19 @@ public class ColorBot {
                         }
                         reader.close();
                         SQLHandler.disconnect(true);
-                        System.out.println("[ColorBot Read-Thread#01 - Shutdown] INFO - Shutdown done");
-                        System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                        logger.info("Shutdown done");
                         System.exit(0);
                     }
                 }
             }
             catch (IOException e) {
                 if (!e.getMessage().equalsIgnoreCase("Stream closed")) {
-                    e.printStackTrace();
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
-                    System.out.println("[ColorBot Read-Thread#01 - Shutdown] ERROR - An error occurred while trying to read the console input");
-                    System.out.println("[ColorBot ColorBot-Thread] Info - ---------------------------------");
+                    logger.error("An error occurred while trying to read the console input", e);
                 }
             }
-            catch (Exception ignore){}
+            catch (Exception e){
+                logger.error("Unknown exception encountered", e);
+            }
         });
 
         shutdownThread.setName("Read-Thread#01 - Shutdown");

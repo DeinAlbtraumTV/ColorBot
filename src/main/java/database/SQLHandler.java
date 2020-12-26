@@ -1,11 +1,14 @@
 package database;
 
 import commons.Database;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 
 public class SQLHandler {
     private static Connection connection;
+    private final static Logger logger = LoggerFactory.getLogger(SQLHandler.class);
 
     public static void connect(boolean logOutput) {
 
@@ -14,13 +17,13 @@ public class SQLHandler {
         try {
             if (logOutput) {
 
-                System.out.println("[ColorBot Database] INFO - Attempting to connect to database");
+                logger.info("Attempting to connect to database");
 
                 String url = "jdbc:mysql://" + Database.host + "/" + Database.database + "?user=" + Database.user + "&password="+ Database.password + "&useLegacyDatetimeCode=false&serverTimezone=" + Database.timezone;
 
                 connection = DriverManager.getConnection(url);
 
-                System.out.println("[ColorBot Database] INFO - Connected to database");
+                logger.info("Connected to database");
             }
             else {
                 String url = "jdbc:mysql://" + Database.host + "/" + Database.database + "?user=" + Database.user + "&password="+ Database.password + "&useLegacyDatetimeCode=false&serverTimezone=" + Database.timezone;
@@ -28,8 +31,7 @@ public class SQLHandler {
                 connection = DriverManager.getConnection(url);
             }
         } catch (SQLException e) {
-            System.out.println("[ColorBot Database] ERROR - An error occurred while trying to connect to database");
-            e.printStackTrace();
+            logger.error("An error occurred while trying to connect to database", e);
         }
     }
 
@@ -37,13 +39,13 @@ public class SQLHandler {
 
         try {
             if (logOutput) {
-                System.out.println("[ColorBot Database] INFO - Attempting to disconnect from database");
+                logger.info("Attempting to disconnect from database");
 
                 if (connection != null) {
                     connection.close();
                 }
 
-                System.out.println("[ColorBot Database] INFO - Disconnected from database");
+                logger.info("Disconnected from database");
             }
             else {
                 if (connection != null) {
@@ -51,8 +53,7 @@ public class SQLHandler {
                 }
             }
         } catch (SQLException e) {
-            System.out.println("[ColorBot Database] ERROR - An error occurred while trying to disconnect from database");
-            e.printStackTrace();
+            logger.error("An error occurred while trying to disconnect from database", e);
         }
     }
 
@@ -65,8 +66,7 @@ public class SQLHandler {
             Statement stmt = connection.createStatement();
             stmt.execute(sql);
         } catch (SQLException e) {
-            System.out.println("[ColorBot Database] ERROR - An error occurred while trying to update database");
-            e.printStackTrace();
+            logger.error("An error occurred while trying to update database", e);
         }
     }
 
@@ -76,8 +76,7 @@ public class SQLHandler {
             stmt.closeOnCompletion();
             return stmt.executeQuery(sql);
         } catch (SQLException e) {
-            System.out.println("[ColorBot Database] ERROR - An error occurred while trying to retrieve data from database");
-            e.printStackTrace();
+            logger.error("An error occurred while trying to retrieve data from database", e);
         }
         return null;
     }
