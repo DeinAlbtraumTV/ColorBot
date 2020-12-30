@@ -4,9 +4,9 @@
 
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
         <file>logs/log-${timeOnLaunch}.log</file>
+        <immediateFlush>true</immediateFlush>
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} %-34.-34thread %10.10X{jda.shard} %-15.-15logger{0} %-6level %msg%n</pattern>
-            <immediateFlush>true</immediateFlush>
         </encoder>
     </appender>
 

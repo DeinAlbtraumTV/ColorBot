@@ -1100,7 +1100,7 @@ public class CommandListener extends ListenerAdapter {
                         ArrayList<String> blacklistedWords = new ArrayList<>();
                         boolean nameContainsBlacklisted = false;
 
-                        if (!resultBlacklist.isClosed()) {
+                        if (!resultBlacklist.isClosed() && resultBlacklist.next()) {
                             do {
                                 blacklistedWords.add(resultBlacklist.getString("word"));
                             } while (resultBlacklist.next());
