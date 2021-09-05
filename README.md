@@ -1,3 +1,7 @@
+#This Repository is outdated and does NOT reflect the latest rework of the Bot, most of the commands listed here have been moved to slash-commands!
+
+
+
 # ColorBot
 Discord-Bot that allows the users to color their names. Can be used for self-roles and other things as well
 
