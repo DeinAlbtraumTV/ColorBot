@@ -1,4 +1,4 @@
-#This Repository is outdated and does NOT reflect the latest rework of the Bot, most of the commands listed here have been moved to slash-commands!
+# This Repository is outdated and does NOT reflect the latest rework of the Bot, most of the commands listed here have been moved to slash-commands!
 
 
 
