@@ -56,7 +56,7 @@ https://discordapp.com/invite/c56xQW6
 
 Interested in using ColorBot? Add him to your server!
 
-https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=bot
+https://discordapp.com/oauth2/authorize?client_id=607987823328362543&permissions=268454912&scope=applications.commands%20bot
 
 If you find a bug, or get the message to report a bug, please, don´t hesitate to create a bugreport in this repository!
 
